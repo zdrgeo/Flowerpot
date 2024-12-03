@@ -1,8 +1,9 @@
-﻿
-using System.Text.Json;
+﻿using System.Text.Json;
 using Azure.Core.Serialization;
 using Azure.Messaging;
 using Azure.Messaging.EventGrid;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace Device.Services.Azure.EventGrid;
 
@@ -11,10 +12,12 @@ internal record struct TelemetryModel(double Temperature, double Humidity);
 public class TelemetryService : ITelemetryService
 {
     private readonly EventGridPublisherClient client;
+    private readonly ILogger<TelemetryService> logger;
 
-    public TelemetryService(EventGridPublisherClient client)
+    public TelemetryService(EventGridPublisherClient client, ILogger<TelemetryService> logger)
     {
         this.client = client ?? throw new ArgumentNullException(nameof (client));
+        this.logger = logger;
     }
 
     public async Task SendEventsAsync(IReadOnlyList<TelemetryEvent> telemetryEvents, CancellationToken cancellationToken)

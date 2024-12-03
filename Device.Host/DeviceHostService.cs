@@ -2,14 +2,14 @@ using Device.Services;
 
 namespace Device.Host;
 
-public class CollectorService : BackgroundService
+public class DeviceHostService : BackgroundService
 {
-    private readonly ITelemetryService telemetryService;
-    private readonly ILogger<CollectorService> logger;
+    private readonly IDeviceService deviceService;
+    private readonly ILogger<DeviceHostService> logger;
 
-    public CollectorService(ITelemetryService telemetryService, ILogger<CollectorService> logger)
+    public DeviceHostService(IDeviceService deviceService, ILogger<DeviceHostService> logger)
     {
-        this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
+        this.deviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
         this.logger = logger;
     }
 

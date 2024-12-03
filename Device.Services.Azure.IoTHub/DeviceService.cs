@@ -3,61 +3,46 @@ using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Provisioning.Client;
 using Microsoft.Azure.Devices.Provisioning.Client.PlugAndPlay;
 using Microsoft.Azure.Devices.Provisioning.Client.Transport;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace Device.Services.Azure.IoTHub;
 
+public class DeviceOptions
+{
+    public string ConnectionString { get; set; }
+}
+
 public class DeviceService : IDeviceService
 {
-    class ProvisioningOptions
+    public DeviceService(TelemetryServiceFactory telemetryServiceFactory, IOptions<DeviceOptions> options, ILogger<DeviceService> logger)
     {
-        public string RegistrationId { get; set; }
-        public string GlobalDeviceEndpoint { get; set; }
-        public string IdScope { get; set; }
-        public string PrimaryKey { get; set; }
-        public string SecondaryKey { get; set; }
+        this.telemetryServiceFactory = telemetryServiceFactory ?? throw new ArgumentNullException(nameof(telemetryServiceFactory));
+        this.options = options ?? throw new ArgumentNullException(nameof(options));
+        this.logger = logger;
     }
 
     private const string ModelId = "dtmi:com:github:zdrgeo:Flowerpot;1";
+    private readonly TelemetryServiceFactory telemetryServiceFactory;
+    private readonly IOptions<DeviceOptions> options;
+    private readonly ILogger<DeviceService> logger;
 
-    private readonly DeviceClient client;
-
-    public Task RunAsync(CancellationToken cancellationToken)
+    public async Task RunAsync(CancellationToken cancellationToken)
     {
-        return Task.Delay(Timeout.Infinite, cancellationToken);
+        DeviceClient deviceClient = CreateDeviceClient(options.Value);
+
+        TelemetryService telemetryService = telemetryServiceFactory(deviceClient);
+
+        await Task.Delay(Timeout.Infinite, cancellationToken);
     }
 
-    static DeviceClient CreateDeviceClient(string connectionString)
+    static DeviceClient CreateDeviceClient(DeviceOptions options)
     {
-        ClientOptions options = new()
+        ClientOptions clientOptions = new()
         {
             ModelId = ModelId,
         };
 
-        return DeviceClient.CreateFromConnectionString(connectionString, TransportType.Amqp, options);
-    }
-
-    static async Task<DeviceClient> ProvisionDeviceAndCreateDeviceClientAsync(ProvisioningOptions options, CancellationToken cancellationToken)
-    {
-        using SecurityProviderSymmetricKey securityProvider = new (options.RegistrationId, options.PrimaryKey, options.SecondaryKey);
-
-        using ProvisioningTransportHandlerAmqp provisioningTransportHandler = new ();
-
-        ProvisioningDeviceClient provisioningDeviceClient = ProvisioningDeviceClient.Create(options.GlobalDeviceEndpoint, options.IdScope, securityProvider, provisioningTransportHandler);
-
-        ProvisioningRegistrationAdditionalData provisioningRegistrationAdditionalData = new ()
-        {
-            JsonData = $"{{ \"modelId\": \"{ ModelId }\" }}",
-        };
-
-        DeviceRegistrationResult deviceRegistrationResult = await provisioningDeviceClient.RegisterAsync(provisioningRegistrationAdditionalData, cancellationToken);
-
-        DeviceAuthenticationWithRegistrySymmetricKey authenticationMethod = new (deviceRegistrationResult.DeviceId, options.PrimaryKey);
-
-        ClientOptions clientOptions = new ()
-        {
-            ModelId = ModelId,
-        };
-
-        return DeviceClient.Create(deviceRegistrationResult.AssignedHub, authenticationMethod, TransportType.Amqp, clientOptions);
+        return DeviceClient.CreateFromConnectionString(options.ConnectionString, TransportType.Amqp, clientOptions);
     }
 }

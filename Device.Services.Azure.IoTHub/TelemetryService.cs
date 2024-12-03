@@ -6,13 +6,15 @@ namespace Device.Services.Azure.IoTHub;
 
 internal record struct TelemetryModel(double Temperature, double Humidity);
 
+public delegate TelemetryService TelemetryServiceFactory(DeviceClient client);
+
 public class TelemetryService : ITelemetryService
 {
-    private readonly DeviceClient client;
+    private readonly DeviceClient deviceClient;
 
-    public TelemetryService(DeviceClient client)
+    public TelemetryService(DeviceClient deviceClient)
     {
-        this.client = client ?? throw new ArgumentNullException(nameof(client));
+        this.deviceClient = deviceClient ?? throw new ArgumentNullException(nameof (deviceClient));
     }
 
     public async Task SendEventsAsync(IReadOnlyList<TelemetryEvent> telemetryEvents, CancellationToken cancellationToken)
@@ -34,7 +36,7 @@ public class TelemetryService : ITelemetryService
             message.Properties.Add("humidityAlert", RaiseHumidityAlert(telemetryEvent.Humidity) ? "true" : "false");
         }
 
-        await client.SendEventBatchAsync(messages, cancellationToken);
+        await deviceClient.SendEventBatchAsync(messages, cancellationToken);
     }
 
     private static bool RaiseTemperatureAlert(double temperature) => temperature < 0 || temperature > 45; 
