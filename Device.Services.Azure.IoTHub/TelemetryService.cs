@@ -4,7 +4,7 @@ using Microsoft.Azure.Devices.Client;
 
 namespace Device.Services.Azure.IoTHub;
 
-internal record struct TelemetryModel(double Temperature, double Humidity);
+internal record struct TelemetryModel(double Temperature, double Humidity, double Illuminance);
 
 public delegate TelemetryService TelemetryServiceFactory(DeviceClient client);
 
@@ -23,7 +23,7 @@ public class TelemetryService : ITelemetryService
         
         foreach (TelemetryEvent telemetryEvent in telemetryEvents)
         {
-            TelemetryModel telemetryModel = new (telemetryEvent.Temperature, telemetryEvent.Humidity);
+            TelemetryModel telemetryModel = new (telemetryEvent.Temperature, telemetryEvent.Humidity, telemetryEvent.Illuminance);
 
             // PnpConvention.CreateMessage()
             using var message = new Message(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(telemetryModel)))

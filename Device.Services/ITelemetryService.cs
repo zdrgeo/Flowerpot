@@ -1,6 +1,6 @@
 ﻿namespace Device.Services;
 
-public readonly record struct TelemetryEvent(double Temperature, double Humidity);
+public readonly record struct TelemetryEvent(double Temperature, double Humidity, double Illuminance);
 
 public interface ITelemetryService
 {

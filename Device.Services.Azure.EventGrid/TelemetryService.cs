@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Device.Services.Azure.EventGrid;
 
-internal record struct TelemetryModel(double Temperature, double Humidity);
+internal record struct TelemetryModel(double Temperature, double Humidity, double Illuminance);
 
 public class TelemetryService : ITelemetryService
 {
@@ -32,7 +32,7 @@ public class TelemetryService : ITelemetryService
         List<EventGridEvent> eventGridEvents = [];
 
         foreach (TelemetryEvent telemetryEvent in telemetryEvents) {
-            TelemetryModel telemetryModel = new (telemetryEvent.Temperature, telemetryEvent.Humidity);
+            TelemetryModel telemetryModel = new (telemetryEvent.Temperature, telemetryEvent.Humidity, telemetryEvent.Illuminance);
 
             EventGridEvent eventGridEvent = new (
                 "ExampleEventSubject",
@@ -51,7 +51,7 @@ public class TelemetryService : ITelemetryService
         // List<CloudEvent> cloudEvents = [];
 
         // foreach (TelemetryEvent telemetryEvent in telemetryEvents) {
-        //     TelemetryModel telemetryModel = new (telemetryEvent.Temperature, telemetryEvent.Humidity);
+        //     TelemetryModel telemetryModel = new (telemetryEvent.Temperature, telemetryEvent.Humidity, telemetryEvent.Illuminance);
 
         //     CloudEvent cloudEvent = new (
         //         "/cloudevents/example/source",
