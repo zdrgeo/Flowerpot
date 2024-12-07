@@ -34,11 +34,13 @@ public class TelemetryService : ITelemetryService
 
             message.Properties.Add("temperatureAlert", RaiseTemperatureAlert(telemetryEvent.Temperature) ? "true" : "false");
             message.Properties.Add("humidityAlert", RaiseHumidityAlert(telemetryEvent.Humidity) ? "true" : "false");
+            message.Properties.Add("illuminanceAlert", RaiseIlluminanceAlert(telemetryEvent.Illuminance) ? "true" : "false");
         }
 
         await deviceClient.SendEventBatchAsync(messages, cancellationToken);
     }
 
-    private static bool RaiseTemperatureAlert(double temperature) => temperature < 0 || temperature > 45; 
+    private static bool RaiseTemperatureAlert(double temperature) => temperature < 10 || temperature > 45; 
     private static bool RaiseHumidityAlert(double humidity) => humidity < 60 || humidity > 95;
+    private static bool RaiseIlluminanceAlert(double illuminance) => illuminance <= 20;
 }
