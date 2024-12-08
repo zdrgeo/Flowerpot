@@ -8,38 +8,58 @@ using Microsoft.Extensions.Logging;
 
 namespace Device.Services.Azure.IoTHub;
 
-public class ProvisioningDeviceOptions
+public class ProvisioningDeviceServiceOptions
 {
-    public string RegistrationId { get; set; }
-    public string GlobalDeviceEndpoint { get; set; }
-    public string IdScope { get; set; }
-    public string Key { get; set; }
+    public required string RegistrationId { get; set; }
+    public required string GlobalDeviceEndpoint { get; set; }
+    public required string IdScope { get; set; }
+    public required string Key { get; set; }
 }
 
-public class ProvisioningDeviceService : IDeviceService
+public class ProvisioningDeviceService(
+    PropertyChangeHandlerFactory propertyChangeHandlerFactory,
+    CommandHandlerFactory commandHandlerFactory,
+    PropertyServiceFactory propertyServiceFactory,
+    TelemetryServiceFactory telemetryServiceFactory,
+    IOptions<ProvisioningDeviceServiceOptions> options,
+    ILogger<ProvisioningDeviceService> logger
+) : IDeviceService
 {
-    public ProvisioningDeviceService(TelemetryServiceFactory telemetryServiceFactory, IOptions<ProvisioningDeviceOptions> options, ILogger<ProvisioningDeviceService> logger)
-    {
-        this.telemetryServiceFactory = telemetryServiceFactory ?? throw new ArgumentNullException(nameof (telemetryServiceFactory));
-        this.options = options ?? throw new ArgumentNullException(nameof (options));
-        this.logger = logger;
-    }
-
-    private const string ModelId = "dtmi:com:github:zdrgeo:Flowerpot;1";
-    private readonly TelemetryServiceFactory telemetryServiceFactory;
-    private readonly IOptions<ProvisioningDeviceOptions> options;
-    private readonly ILogger<ProvisioningDeviceService> logger;
+    const string ModelId = "dtmi:com:github:zdrgeo:Flowerpot;1";
+    readonly PropertyChangeHandlerFactory propertyChangeHandlerFactory = propertyChangeHandlerFactory ?? throw new ArgumentNullException(nameof(propertyChangeHandlerFactory));
+    readonly CommandHandlerFactory commandHandlerFactory = commandHandlerFactory ?? throw new ArgumentNullException(nameof(commandHandlerFactory));
+    readonly PropertyServiceFactory propertyServiceFactory = propertyServiceFactory ?? throw new ArgumentNullException(nameof(propertyServiceFactory));
+    readonly TelemetryServiceFactory telemetryServiceFactory = telemetryServiceFactory ?? throw new ArgumentNullException(nameof(telemetryServiceFactory));
+    readonly IOptions<ProvisioningDeviceServiceOptions> options = options ?? throw new ArgumentNullException(nameof(options));
+    readonly ILogger<ProvisioningDeviceService> logger = logger;
+    readonly IOptions<PropertyChangeHandlerOptions> propertyChangeHandlerOptions;
+    readonly ILogger<PropertyChangeHandler> propertyChangeHandlerLogger;
+    readonly IOptions<CommandHandlerOptions> commandHandlerOptions;
+    readonly ILogger<CommandHandler> commandHandlerLogger;
+    readonly IOptions<TelemetryServiceOptions> telemetryServiceOptions;
+    readonly ILogger<TelemetryService> telemetryLogger;
+    readonly IOptions<PropertyServiceOptions> propertyServiceOptions;
+    readonly ILogger<PropertyService> propertyLogger;
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
         DeviceClient deviceClient = await CreateDeviceClientAsync(options.Value, cancellationToken);
 
-        TelemetryService telemetryService = telemetryServiceFactory(deviceClient);
+        PropertyChangeHandler propertyChangeHandler = propertyChangeHandlerFactory(deviceClient, propertyChangeHandlerOptions, propertyChangeHandlerLogger);
 
-        await Task.Delay(Timeout.Infinite, cancellationToken);
+        await propertyChangeHandler.RegisterAsync(cancellationToken);
+
+        CommandHandler commandHandler = commandHandlerFactory(deviceClient, commandHandlerOptions, commandHandlerLogger);
+
+        await commandHandler.RegisterAsync(cancellationToken);
+
+        PropertyService propertyService = propertyServiceFactory(deviceClient, propertyServiceOptions, propertyLogger);
+        TelemetryService telemetryService = telemetryServiceFactory(deviceClient, telemetryServiceOptions, telemetryLogger);
+
+        await Task.WhenAll(propertyService.RunAsync(cancellationToken), telemetryService.RunAsync(cancellationToken));
     }
 
-    static async Task<DeviceClient> CreateDeviceClientAsync(ProvisioningDeviceOptions options, CancellationToken cancellationToken)
+    static async Task<DeviceClient> CreateDeviceClientAsync(ProvisioningDeviceServiceOptions options, CancellationToken cancellationToken)
     {
         using SecurityProviderSymmetricKey securityProvider = new (options.RegistrationId, options.Key, null);
 

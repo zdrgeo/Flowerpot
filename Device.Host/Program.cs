@@ -22,7 +22,7 @@ builder.Services.AddAzureClients(
 // builder.Services.AddScoped<IDeviceService, DeviceService>();
 builder.Services.AddSingleton<TelemetryServiceFactory>();
 builder.Services.AddScoped<IDeviceService, ProvisioningDeviceService>();
-builder.Services.AddHostedService<DeviceHostService>();
+builder.Services.AddHostedService<DeviceHostedService>();
 
 var host = builder.Build();
 

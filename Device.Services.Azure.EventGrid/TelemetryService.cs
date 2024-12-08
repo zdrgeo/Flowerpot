@@ -7,20 +7,33 @@ using Microsoft.Extensions.Logging;
 
 namespace Device.Services.Azure.EventGrid;
 
-internal record struct TelemetryModel(double Temperature, double Humidity, double Illuminance);
+public class TelemetryServiceOptions { }
 
-public class TelemetryService : ITelemetryService
+public class TelemetryService(EventGridPublisherClient client, IOptions<TelemetryServiceOptions> options, ILogger<TelemetryService> logger) : ITelemetryService
 {
-    private readonly EventGridPublisherClient client;
-    private readonly ILogger<TelemetryService> logger;
+    readonly record struct EventModel(double Temperature, double Humidity, double Illuminance);
 
-    public TelemetryService(EventGridPublisherClient client, ILogger<TelemetryService> logger)
+    const int Interval = 60_000;
+    readonly EventGridPublisherClient client = client ?? throw new ArgumentNullException(nameof(client));
+    readonly IOptions<TelemetryServiceOptions> options = options ?? throw new ArgumentNullException(nameof(options));
+    readonly ILogger<TelemetryService> logger = logger;
+
+    public async Task RunAsync(CancellationToken cancellationToken)
     {
-        this.client = client ?? throw new ArgumentNullException(nameof (client));
-        this.logger = logger;
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation("Sending telemetry events at: {time}", DateTimeOffset.Now);
+            }
+
+            await SendEventsAsync([new EventModel()], cancellationToken);
+
+            await Task.Delay(Interval, cancellationToken);
+        }
     }
 
-    public async Task SendEventsAsync(IReadOnlyList<TelemetryEvent> telemetryEvents, CancellationToken cancellationToken)
+    async Task SendEventsAsync(IReadOnlyList<EventModel> eventModels, CancellationToken cancellationToken)
     {
         JsonObjectSerializer serializer = new (
             new JsonSerializerOptions()
@@ -31,14 +44,12 @@ public class TelemetryService : ITelemetryService
 
         List<EventGridEvent> eventGridEvents = [];
 
-        foreach (TelemetryEvent telemetryEvent in telemetryEvents) {
-            TelemetryModel telemetryModel = new (telemetryEvent.Temperature, telemetryEvent.Humidity, telemetryEvent.Illuminance);
-
+        foreach (EventModel eventModel in eventModels) {
             EventGridEvent eventGridEvent = new (
                 "ExampleEventSubject",
                 "Example.EventType",
                 "1.0",
-                serializer.Serialize(telemetryModel)
+                serializer.Serialize(eventModel)
             );
 
             eventGridEvents.Add(eventGridEvent);
@@ -50,13 +61,12 @@ public class TelemetryService : ITelemetryService
 
         // List<CloudEvent> cloudEvents = [];
 
-        // foreach (TelemetryEvent telemetryEvent in telemetryEvents) {
-        //     TelemetryModel telemetryModel = new (telemetryEvent.Temperature, telemetryEvent.Humidity, telemetryEvent.Illuminance);
+        // foreach (EventModel eventModel in eventModels) {
 
         //     CloudEvent cloudEvent = new (
         //         "/cloudevents/example/source",
         //         "Example.EventType",
-        //         serializer.Serialize(telemetryModel)
+        //         serializer.Serialize(eventModel)
         //     );
 
         //     cloudEvents.Add(cloudEvent);

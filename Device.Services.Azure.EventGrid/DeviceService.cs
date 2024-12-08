@@ -3,19 +3,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Device.Services.Azure.EventGrid;
 
-public class DeviceService : IDeviceService
+public class DeviceServiceOptions { }
+
+public class DeviceService(TelemetryService telemetryService, IOptions<DeviceServiceOptions> options, ILogger<DeviceService> logger) : IDeviceService
 {
-    private readonly IOptions<DeviceService> options;
-    private readonly ILogger<DeviceService> logger;
+    readonly TelemetryService telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
+    readonly IOptions<DeviceServiceOptions> options = options ?? throw new ArgumentNullException(nameof(options));
+    readonly ILogger<DeviceService> logger = logger;
 
-    public DeviceService(IOptions<DeviceService> options, ILogger<DeviceService> logger)
-    {
-        this.options = options ?? throw new ArgumentNullException(nameof(options));
-        this.logger = logger;
-    }
-
-    public Task RunAsync(CancellationToken cancellationToken)
-    {
-        return Task.Delay(Timeout.Infinite, cancellationToken);
-    }
+    public Task RunAsync(CancellationToken cancellationToken) => telemetryService.RunAsync(cancellationToken);
 }

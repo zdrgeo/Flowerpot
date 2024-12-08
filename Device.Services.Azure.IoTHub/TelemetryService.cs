@@ -1,40 +1,56 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Microsoft.Azure.Devices.Client;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Device.Services.Azure.IoTHub;
 
-internal record struct TelemetryModel(double Temperature, double Humidity, double Illuminance);
+public class TelemetryServiceOptions { }
 
-public delegate TelemetryService TelemetryServiceFactory(DeviceClient client);
+public delegate TelemetryService TelemetryServiceFactory(DeviceClient client, IOptions<TelemetryServiceOptions> options, ILogger<TelemetryService> logger);
 
-public class TelemetryService : ITelemetryService
+public class TelemetryService(DeviceClient deviceClient, IOptions<TelemetryServiceOptions> options, ILogger<TelemetryService> logger) : ITelemetryService
 {
-    private readonly DeviceClient deviceClient;
+    readonly record struct EventModel(double Temperature, double Humidity, double Illuminance);
 
-    public TelemetryService(DeviceClient deviceClient)
+    const int Interval = 60_000;
+    private readonly DeviceClient deviceClient = deviceClient ?? throw new ArgumentNullException(nameof(deviceClient));
+    private readonly IOptions<TelemetryServiceOptions> options = options ?? throw new ArgumentNullException(nameof(options));
+    private readonly ILogger<TelemetryService> logger = logger;
+
+    public async Task RunAsync(CancellationToken cancellationToken)
     {
-        this.deviceClient = deviceClient ?? throw new ArgumentNullException(nameof (deviceClient));
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation("Sending telemetry events at: {time}", DateTimeOffset.Now);
+            }
+
+            await SendEventsAsync([new EventModel()], cancellationToken);
+
+            await Task.Delay(Interval, cancellationToken);
+        }
     }
 
-    public async Task SendEventsAsync(IReadOnlyList<TelemetryEvent> telemetryEvents, CancellationToken cancellationToken)
+    async Task SendEventsAsync(IReadOnlyList<EventModel> eventModels, CancellationToken cancellationToken)
     {
         List<Message> messages = [];
-        
-        foreach (TelemetryEvent telemetryEvent in telemetryEvents)
-        {
-            TelemetryModel telemetryModel = new (telemetryEvent.Temperature, telemetryEvent.Humidity, telemetryEvent.Illuminance);
 
+        foreach (EventModel eventModel in eventModels)
+        {
             // PnpConvention.CreateMessage()
-            using var message = new Message(Encoding.ASCII.GetBytes(JsonSerializer.Serialize(telemetryModel)))
+
+            using var message = new Message(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(eventModel)))
             {
                 ContentType = "application/json",
                 ContentEncoding = "utf-8",
             };
 
-            message.Properties.Add("temperatureAlert", RaiseTemperatureAlert(telemetryEvent.Temperature) ? "true" : "false");
-            message.Properties.Add("humidityAlert", RaiseHumidityAlert(telemetryEvent.Humidity) ? "true" : "false");
-            message.Properties.Add("illuminanceAlert", RaiseIlluminanceAlert(telemetryEvent.Illuminance) ? "true" : "false");
+            message.Properties.Add("temperatureAlert", RaiseTemperatureAlert(eventModel.Temperature) ? "true" : "false");
+            message.Properties.Add("humidityAlert", RaiseHumidityAlert(eventModel.Humidity) ? "true" : "false");
+            message.Properties.Add("illuminanceAlert", RaiseIlluminanceAlert(eventModel.Illuminance) ? "true" : "false");
         }
 
         await deviceClient.SendEventBatchAsync(messages, cancellationToken);

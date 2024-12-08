@@ -1,6 +1,6 @@
 ﻿namespace Device.Services;
 
-public interface ITelemetryService
+public interface IPropertyService
 {
     public Task RunAsync(CancellationToken cancellationToken);
 }
