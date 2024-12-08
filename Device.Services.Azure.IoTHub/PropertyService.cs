@@ -11,7 +11,7 @@ public delegate PropertyService PropertyServiceFactory(DeviceClient client, IOpt
 
 public class PropertyService(DeviceClient deviceClient, IOptions<PropertyServiceOptions> options, ILogger<PropertyService> logger) : IPropertyService
 {
-    const int Interval = 60_000;
+    const int Interval = 600_000;
     private readonly DeviceClient deviceClient = deviceClient ?? throw new ArgumentNullException(nameof(deviceClient));
     readonly IOptions<PropertyServiceOptions> options = options ?? throw new ArgumentNullException(nameof(options));
     readonly ILogger<PropertyService> logger = logger;
