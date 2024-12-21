@@ -1,4 +1,4 @@
-﻿namespace Device.Services;
+﻿namespace Device.Services.Azure.IoTHub;
 
 public interface ICommandHandler
 {
