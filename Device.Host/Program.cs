@@ -20,6 +20,9 @@ builder.Services.AddAzureClients(
 );
 // builder.Services.AddScoped<ITelemetryService, TelemetryService>();
 // builder.Services.AddScoped<IDeviceService, DeviceService>();
+builder.Services.AddSingleton<DesiredPropertyChangeHandlerFactory>();
+builder.Services.AddSingleton<CommandHandlerFactory>();
+builder.Services.AddSingleton<PropertyServiceFactory>();
 builder.Services.AddSingleton<TelemetryServiceFactory>();
 builder.Services.AddScoped<IDeviceService, ProvisioningDeviceService>();
 builder.Services.AddHostedService<DeviceHostedService>();
