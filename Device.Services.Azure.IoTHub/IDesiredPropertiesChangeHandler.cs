@@ -1,6 +1,6 @@
 ﻿namespace Device.Services.Azure.IoTHub;
 
-public interface IDesiredPropertyChangeHandler
+public interface IDesiredPropertiesChangeHandler
 {
     Task RegisterAsync(CancellationToken cancellationToken);
     Task UnregisterAsync(CancellationToken cancellationToken);

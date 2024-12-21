@@ -7,15 +7,15 @@ using System.Text.Json;
 
 namespace Device.Services.Azure.IoTHub;
 
-public class DesiredPropertyChangeHandlerOptions { }
+public class DesiredPropertiesChangeHandlerOptions { }
 
-public delegate DesiredPropertyChangeHandler DesiredPropertyChangeHandlerFactory(DeviceClient deviceClient, IOptions<DesiredPropertyChangeHandlerOptions> options, ILogger<DesiredPropertyChangeHandler> logger);
+public delegate DesiredPropertiesChangeHandler DesiredPropertiesChangeHandlerFactory(DeviceClient deviceClient, IOptions<DesiredPropertiesChangeHandlerOptions> options, ILogger<DesiredPropertiesChangeHandler> logger);
 
-public class DesiredPropertyChangeHandler(DeviceClient deviceClient, IOptions<DesiredPropertyChangeHandlerOptions> options, ILogger<DesiredPropertyChangeHandler> logger) : IDesiredPropertyChangeHandler
+public class DesiredPropertiesChangeHandler(DeviceClient deviceClient, IOptions<DesiredPropertiesChangeHandlerOptions> options, ILogger<DesiredPropertiesChangeHandler> logger) : IDesiredPropertiesChangeHandler
 {
     readonly DeviceClient deviceClient = deviceClient ?? throw new ArgumentNullException(nameof(deviceClient));
-    readonly IOptions<DesiredPropertyChangeHandlerOptions> options = options ?? throw new ArgumentNullException(nameof(options));
-    readonly ILogger<DesiredPropertyChangeHandler> logger = logger;
+    readonly IOptions<DesiredPropertiesChangeHandlerOptions> options = options ?? throw new ArgumentNullException(nameof(options));
+    readonly ILogger<DesiredPropertiesChangeHandler> logger = logger;
 
     public async Task RegisterAsync(CancellationToken cancellationToken)
     {
@@ -23,12 +23,12 @@ public class DesiredPropertyChangeHandler(DeviceClient deviceClient, IOptions<De
 
         await ChangeDesiredPropertiesAsync(twin.Properties.Desired, null);
 
-        await deviceClient.SetDesiredPropertyUpdateCallbackAsync(ChangeDesiredPropertiesAsync, null);
+        await deviceClient.SetDesiredPropertyUpdateCallbackAsync(ChangeDesiredPropertiesAsync, null, cancellationToken);
     }
 
-    public Task UnregisterAsync(CancellationToken cancellationToken) => deviceClient.SetDesiredPropertyUpdateCallbackAsync(null, null);
+    public Task UnregisterAsync(CancellationToken cancellationToken) => deviceClient.SetDesiredPropertyUpdateCallbackAsync(null, null, cancellationToken);
 
-    async Task ChangeDesiredPropertiesAsync(TwinCollection desiredProperties, object userContext)
+    async Task ChangeDesiredPropertiesAsync(TwinCollection desiredProperties, object? userContext)
     {
         double desiredTemperature = desiredProperties["temperature"].Value<double>();
 

@@ -10,7 +10,7 @@ public class DeviceServiceOptions
 }
 
 public class DeviceService(
-    DesiredPropertyChangeHandlerFactory desiredPropertyChangeHandlerFactory,
+    DesiredPropertiesChangeHandlerFactory desiredPropertiesChangeHandlerFactory,
     CommandHandlerFactory commandHandlerFactory,
     PropertyServiceFactory propertyServiceFactory,
     TelemetryServiceFactory telemetryServiceFactory,
@@ -19,14 +19,14 @@ public class DeviceService(
 ) : IDeviceService
 {
     const string ModelId = "dtmi:com:github:zdrgeo:Flowerpot;1";
-    readonly DesiredPropertyChangeHandlerFactory desiredPropertyChangeHandlerFactory = desiredPropertyChangeHandlerFactory ?? throw new ArgumentNullException(nameof(desiredPropertyChangeHandlerFactory));
+    readonly DesiredPropertiesChangeHandlerFactory desiredPropertiesChangeHandlerFactory = desiredPropertiesChangeHandlerFactory ?? throw new ArgumentNullException(nameof(desiredPropertiesChangeHandlerFactory));
     readonly CommandHandlerFactory commandHandlerFactory = commandHandlerFactory ?? throw new ArgumentNullException(nameof(commandHandlerFactory));
     readonly PropertyServiceFactory propertyServiceFactory = propertyServiceFactory ?? throw new ArgumentNullException(nameof(propertyServiceFactory));
     readonly TelemetryServiceFactory telemetryServiceFactory = telemetryServiceFactory ?? throw new ArgumentNullException(nameof(telemetryServiceFactory));
     readonly IOptions<DeviceServiceOptions> options = options ?? throw new ArgumentNullException(nameof(options));
     readonly ILogger<DeviceService> logger = logger;
-    readonly IOptions<DesiredPropertyChangeHandlerOptions> desiredPropertyChangeHandlerOptions;
-    readonly ILogger<DesiredPropertyChangeHandler> desiredPropertyChangeHandlerLogger;
+    readonly IOptions<DesiredPropertiesChangeHandlerOptions> desiredPropertiesChangeHandlerOptions;
+    readonly ILogger<DesiredPropertiesChangeHandler> desiredPropertiesChangeHandlerLogger;
     readonly IOptions<CommandHandlerOptions> commandHandlerOptions;
     readonly ILogger<CommandHandler> commandHandlerLogger;
     readonly IOptions<TelemetryServiceOptions> telemetryServiceOptions;
@@ -38,9 +38,9 @@ public class DeviceService(
     {
         DeviceClient deviceClient = CreateDeviceClient(options.Value);
 
-        DesiredPropertyChangeHandler desiredPropertyChangeHandler = desiredPropertyChangeHandlerFactory(deviceClient, desiredPropertyChangeHandlerOptions, desiredPropertyChangeHandlerLogger);
+        DesiredPropertiesChangeHandler desiredPropertiesChangeHandler = desiredPropertiesChangeHandlerFactory(deviceClient, desiredPropertiesChangeHandlerOptions, desiredPropertiesChangeHandlerLogger);
 
-        await desiredPropertyChangeHandler.RegisterAsync(cancellationToken);
+        await desiredPropertiesChangeHandler.RegisterAsync(cancellationToken);
 
         CommandHandler commandHandler = commandHandlerFactory(deviceClient, commandHandlerOptions, commandHandlerLogger);
 
