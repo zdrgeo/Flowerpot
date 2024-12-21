@@ -37,9 +37,9 @@ public class ProvisioningDeviceService(
     readonly IOptions<CommandHandlerOptions> commandHandlerOptions;
     readonly ILogger<CommandHandler> commandHandlerLogger;
     readonly IOptions<TelemetryServiceOptions> telemetryServiceOptions;
-    readonly ILogger<TelemetryService> telemetryLogger;
+    readonly ILogger<TelemetryService> telemetryServiceLogger;
     readonly IOptions<PropertyServiceOptions> propertyServiceOptions;
-    readonly ILogger<PropertyService> propertyLogger;
+    readonly ILogger<PropertyService> propertyServiceLogger;
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
@@ -53,8 +53,8 @@ public class ProvisioningDeviceService(
 
         await commandHandler.RegisterAsync(cancellationToken);
 
-        PropertyService propertyService = propertyServiceFactory(deviceClient, propertyServiceOptions, propertyLogger);
-        TelemetryService telemetryService = telemetryServiceFactory(deviceClient, telemetryServiceOptions, telemetryLogger);
+        PropertyService propertyService = propertyServiceFactory(deviceClient, propertyServiceOptions, propertyServiceLogger);
+        TelemetryService telemetryService = telemetryServiceFactory(deviceClient, telemetryServiceOptions, telemetryServiceLogger);
 
         await Task.WhenAll(propertyService.RunAsync(cancellationToken), telemetryService.RunAsync(cancellationToken));
     }

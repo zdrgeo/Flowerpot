@@ -8,7 +8,7 @@ using Device.Services;
 using Device.Services.Azure.IoTHub;
 // using Device.Services.Azure.EventGrid;
 
-var builder = Host.CreateApplicationBuilder(args);
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.AddAzureClients(
     clientBuilder =>
@@ -24,7 +24,7 @@ builder.Services.AddSingleton<TelemetryServiceFactory>();
 builder.Services.AddScoped<IDeviceService, ProvisioningDeviceService>();
 builder.Services.AddHostedService<DeviceHostedService>();
 
-var host = builder.Build();
+IHost host = builder.Build();
 
 host.Run();
 

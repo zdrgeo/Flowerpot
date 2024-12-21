@@ -8,7 +8,7 @@ namespace Device.Services.Azure.IoTHub;
 
 public class TelemetryServiceOptions { }
 
-public delegate TelemetryService TelemetryServiceFactory(DeviceClient client, IOptions<TelemetryServiceOptions> options, ILogger<TelemetryService> logger);
+public delegate TelemetryService TelemetryServiceFactory(DeviceClient deviceClient, IOptions<TelemetryServiceOptions> options, ILogger<TelemetryService> logger);
 
 public class TelemetryService(DeviceClient deviceClient, IOptions<TelemetryServiceOptions> options, ILogger<TelemetryService> logger) : ITelemetryService
 {

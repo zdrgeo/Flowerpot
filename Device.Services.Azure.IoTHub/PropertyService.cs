@@ -7,7 +7,7 @@ namespace Device.Services.Azure.IoTHub;
 
 public class PropertyServiceOptions { }
 
-public delegate PropertyService PropertyServiceFactory(DeviceClient client, IOptions<PropertyServiceOptions> options, ILogger<PropertyService> logger);
+public delegate PropertyService PropertyServiceFactory(DeviceClient deviceClient, IOptions<PropertyServiceOptions> options, ILogger<PropertyService> logger);
 
 public class PropertyService(DeviceClient deviceClient, IOptions<PropertyServiceOptions> options, ILogger<PropertyService> logger) : IPropertyService
 {

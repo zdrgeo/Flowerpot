@@ -9,7 +9,7 @@ namespace Device.Services.Azure.IoTHub;
 
 public class CommandHandlerOptions { }
 
-public delegate CommandHandler CommandHandlerFactory(DeviceClient client, IOptions<CommandHandlerOptions> options, ILogger<CommandHandler> logger);
+public delegate CommandHandler CommandHandlerFactory(DeviceClient deviceClient, IOptions<CommandHandlerOptions> options, ILogger<CommandHandler> logger);
 
 public class CommandHandler(DeviceClient deviceClient, IOptions<CommandHandlerOptions> options, ILogger<CommandHandler> logger) : ICommandHandler
 {

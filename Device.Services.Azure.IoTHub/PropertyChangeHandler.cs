@@ -9,7 +9,7 @@ namespace Device.Services.Azure.IoTHub;
 
 public class PropertyChangeHandlerOptions { }
 
-public delegate PropertyChangeHandler PropertyChangeHandlerFactory(DeviceClient client, IOptions<PropertyChangeHandlerOptions> options, ILogger<PropertyChangeHandler> logger);
+public delegate PropertyChangeHandler PropertyChangeHandlerFactory(DeviceClient deviceClient, IOptions<PropertyChangeHandlerOptions> options, ILogger<PropertyChangeHandler> logger);
 
 public class PropertyChangeHandler(DeviceClient deviceClient, IOptions<PropertyChangeHandlerOptions> options, ILogger<PropertyChangeHandler> logger) : IPropertyChangeHandler
 {
