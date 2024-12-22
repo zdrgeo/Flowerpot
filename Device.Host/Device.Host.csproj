@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="../Device.Services.Azure.EventGrid/Device.Services.Azure.EventGrid.csproj" />
     <ProjectReference Include="../Device.Services.Azure.IoTHub/Device.Services.Azure.IoTHub.csproj" />
+    <ProjectReference Include="../Device.Services.Azure.Relay/Device.Services.Azure.Relay.csproj" />
     <ProjectReference Include="../Device.Services/Device.Services.csproj" />
   </ItemGroup>
 </Project>
