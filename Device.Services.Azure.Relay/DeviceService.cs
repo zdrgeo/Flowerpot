@@ -1,5 +1,4 @@
-﻿
-using System.Net;
+﻿using System.Net;
 using Microsoft.Azure.Relay;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
