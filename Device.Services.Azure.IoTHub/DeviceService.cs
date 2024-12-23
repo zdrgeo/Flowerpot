@@ -36,7 +36,7 @@ public class DeviceService(
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
-        DeviceClient deviceClient = CreateDeviceClient(options.Value);
+        await using DeviceClient deviceClient = CreateDeviceClient(options.Value);
 
         DesiredPropertiesChangeHandler desiredPropertiesChangeHandler = desiredPropertiesChangeHandlerFactory(deviceClient, desiredPropertiesChangeHandlerOptions, desiredPropertiesChangeHandlerLogger);
 
