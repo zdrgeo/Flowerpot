@@ -1,2 +1,2 @@
-appsettings.json
-appsettings.*.json
+appsettings_.json
+appsettings_.*.json
