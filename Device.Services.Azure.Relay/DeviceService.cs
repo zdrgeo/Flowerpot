@@ -32,7 +32,14 @@ public class DeviceService(IOptions<DeviceServiceOptions> options, ILogger<Devic
     {
         HybridConnectionListener listener = new (options.Value.ConnectionString);
 
-        listener.RequestHandler = HandleRequestAsync;
+        listener.RequestHandler = async (context) => await (
+            context.Request.Url.Segments switch
+            {
+                ["/", "flowerpot/", "application" or "application/"] => HandleApplicationAsync(context),
+                ["/", "flowerpot/", "measurement" or "measurement/"] => HandleMeasurementAsync(context),
+                _ => HandleAsync(context)
+            }
+        );
 
         await listener.OpenAsync(cancellationToken);
 
@@ -48,7 +55,7 @@ public class DeviceService(IOptions<DeviceServiceOptions> options, ILogger<Devic
                 logger.LogInformation("Reading sensors data at: {time}", DateTimeOffset.Now);
             }
 
-            DateTimeOffset timestamp = DateTimeOffset.Now;
+            DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
             // Reading sensors data...
             double temperature = Random.Shared.NextDouble() * 100;
@@ -72,10 +79,21 @@ public class DeviceService(IOptions<DeviceServiceOptions> options, ILogger<Devic
         await listener.CloseAsync(CancellationToken.None);
     }
 
-    private async void HandleRequestAsync(RelayedHttpListenerContext context)
+    private async Task HandleApplicationAsync(RelayedHttpListenerContext context)
     {
-        // using StreamReader streamReader = new (context.Request.InputStream);
+        context.Response.StatusCode = HttpStatusCode.OK;
+        context.Response.StatusDescription = "OK";
+        context.Response.Headers.Add(HttpRequestHeader.ContentType, "text/html");
 
+        await using FileStream fileStream = new (Path.Combine(AppContext.BaseDirectory, "Application.html"), FileMode.Open, FileAccess.Read);
+
+        await fileStream.CopyToAsync(context.Response.OutputStream);
+
+        await context.Response.CloseAsync();
+    }
+
+    private async Task HandleMeasurementAsync(RelayedHttpListenerContext context)
+    {
         // MeasurementRequestModel measurementRequest = await JsonSerializer.DeserializeAsync<MeasurementRequestModel>(context.Request.InputStream);
 
         context.Response.StatusCode = HttpStatusCode.OK;
@@ -89,9 +107,15 @@ public class DeviceService(IOptions<DeviceServiceOptions> options, ILogger<Devic
             measurementResponse.Measurements.AddRange(measurements);
         }
 
-        // using StreamWriter streamWriter = new (context.Response.OutputStream);
-
         await JsonSerializer.SerializeAsync(context.Response.OutputStream, measurementResponse);
+
+        await context.Response.CloseAsync();
+    }
+
+    private async Task HandleAsync(RelayedHttpListenerContext context)
+    {
+        context.Response.StatusCode = HttpStatusCode.NotFound;
+        context.Response.StatusDescription = "Not Found";
 
         await context.Response.CloseAsync();
     }

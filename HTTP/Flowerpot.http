@@ -1,6 +1,10 @@
 ###
 
-GET https://flowerpot.servicebus.windows.net/flowerpot
+GET https://flowerpot.servicebus.windows.net/flowerpot/application
+
+###
+
+GET https://flowerpot.servicebus.windows.net/flowerpot/measurement
 
 ###
 
