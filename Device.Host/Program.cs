@@ -27,17 +27,17 @@ builder.Services.AddAzureClients(
 // builder.Services.AddSingleton<CommandHandlerFactory>();
 // builder.Services.AddSingleton<PropertyServiceFactory>();
 // builder.Services.AddSingleton<TelemetryServiceFactory>();
-// // builder.Services.AddScoped<IDeviceService, DeviceService>();
-// builder.Services.AddScoped<IDeviceService, ProvisioningDeviceService>();
+// // builder.Services.AddSingleton<IDeviceService, DeviceService>();
+// builder.Services.AddSingleton<IDeviceService, ProvisioningDeviceService>();
 // Azure IoT Hub
 
 // Azure Event Grid
-// builder.Services.AddScoped<ITelemetryService, TelemetryService>();
-// builder.Services.AddScoped<IDeviceService, DeviceService>();
+// builder.Services.AddSingleton<ITelemetryService, TelemetryService>();
+// builder.Services.AddSingleton<IDeviceService, DeviceService>();
 // Azure Event Grid
 
 // Azure Relay
-builder.Services.AddScoped<IDeviceService, DeviceService>();
+builder.Services.AddSingleton<IDeviceService, DeviceService>();
 // Azure Relay
 
 builder.Services.AddHostedService<DeviceHostedService>();
