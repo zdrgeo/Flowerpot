@@ -22,7 +22,7 @@
     <!-- Dashboard (default view) -->
     <div id="dashboard" class="hidden">
       <div class="bg-white rounded-lg shadow-md p-4">
-        <h2 class="text-lg font-semibold border-b border-slate-200">Last measurement</h2>
+        <h2 class="text-gray-700 font-semibold border-b border-slate-200">Last measurement</h2>
         <p id="timestamp" class="text-gray-700 mt-2">
             Timestamp: unknown
         </p>
@@ -35,10 +35,15 @@
         <p id="illuminance" class="text-gray-700 mt-2">
             Illuminance: unknown
         </p>
-        <p id="nextRefreshAt" class="text-gray-700 mt-2 border-t border-slate-200">
+        <h3 id="nextRefreshAt" class="text-gray-700 mt-2 border-t border-slate-200">
             Next refresh at: unknown
-        </p>
-    </div>
+        </h3>
+      </div>
+      <div class="bg-white rounded-lg shadow-md p-4">
+        <h2 class="text-gray-700 font-semibold border-b border-slate-200">Last 5 measurements</h2>
+        <div class="view">
+        </div>
+      </div>
     </div>
 
     <!-- About -->
@@ -114,6 +119,29 @@
     const interval = setInterval(refresh, refreshInterval);
 
     document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
+  </script>
+
+  <script type="module">
+    import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
+
+    const x = d3
+      .scaleLinear()
+      .domain([0, 4])
+      .range([0, 200]);
+
+    const y = d3
+      .scaleLinear()
+      .domain([0, 4])
+      .range([0, 200]);
+
+    const svg = d3
+      .select('.view')
+      .append('svg');
+
+    svg
+      .append('g')
+      .attr("transform", `translate(0, 0)`)
+      .call(d3.axisBottom(x));
   </script>
 </body>
 
