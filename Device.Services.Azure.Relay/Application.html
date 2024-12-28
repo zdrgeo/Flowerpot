@@ -1,127 +1,120 @@
-<!doctype html>
-<html class="h-full bg-gray-100">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="h-full">
-        <div class="min-h-full">
-            <nav class="bg-gray-800">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex h-16 items-center justify-left">
-                <div class="flex items-center">
-                    <div class="hidden md:block">
-                    <div class="flex items-baseline space-x-4">
-                        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                        <a href="#" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Flowerpot</a>
-                        <a href="#" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">About</a>
-                    </div>
-                    </div>
-                </div>
-                <div class="-mr-2 flex md:hidden">
-                    <!-- Mobile menu button -->
-                    <button type="button" class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" aria-controls="mobile-menu" aria-expanded="false">
-                    <span class="absolute -inset-0.5"></span>
-                    <span class="sr-only">Open main menu</span>
-                    <!-- Menu open: "hidden", Menu closed: "block" -->
-                    <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                    </svg>
-                    <!-- Menu open: "block", Menu closed: "hidden" -->
-                    <svg class="hidden size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                    </button>
-                </div>
-                </div>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
 
-            <!-- Mobile menu, show/hide based on menu state. -->
-            <div class="md:hidden" id="mobile-menu">
-                <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <a href="#" class="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white" aria-current="page">Flowerpot</a>
-                <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">About</a>
-                </div>
-            </div>
-            </nav>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flowerpot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!--
+  Please create a simple mobile app shell using HTML, Tailwind CSS and JavaScript. The app shell should have a menu with items leading to two views - "Dashboard" and "About". On the Dashboard, display a card again using Tailwind CSS.
+  -->
+</head>
 
-            <header class="bg-white shadow">
-            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900">Flowerpot</h1>
-            </div>
-            </header>
-            <main>
-            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <!-- Your content -->
-                <div class="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96">      
-                    <div class="mx-3 mb-0 border-b border-slate-200 pt-3 pb-2 px-1">
-                      <span class="text-sm font-medium text-slate-600">
-                        Last measurement
-                      </span>
-                    </div>
+<body class="bg-gray-100 h-screen flex flex-col">
+  <!-- Header -->
+  <header class="bg-gray-700 text-white text-center p-4">
+    <h1 class="text-xl font-bold">Flowerpot</h1>
+  </header>
 
-                    <div class="p-4">
-                      <p id="timestamp" class="text-slate-600 leading-normal font-light">
-                        Timestamp: unknown
-                      </p>
-                      <p id="temperature" class="text-slate-600 leading-normal font-light">
-                        Temperature: unknown
-                      </p>
-                      <p id="humidity" class="text-slate-600 leading-normal font-light">
-                        Humidity: unknown
-                      </p>
-                      <p id="illuminance" class="text-slate-600 leading-normal font-light">
-                        Illuminance: unknown
-                      </p>
-                    </div>
-                    <div class="mx-3 border-t border-slate-200 pb-3 pt-2 px-1">
-                      <span id="nextRefreshAt" class="text-sm text-slate-600 font-medium">
-                        Next refresh at: unknown
-                      </span>
-                    </div>
-                  </div>
+  <!-- Main Content -->
+  <main id="content" class="flex-1 overflow-y-auto p-4">
+    <!-- Dashboard (default view) -->
+    <div id="dashboard" class="hidden">
+      <div class="bg-white rounded-lg shadow-md p-4">
+        <h2 class="text-lg font-semibold border-b border-slate-200">Last measurement</h2>
+        <p id="timestamp" class="text-gray-700 mt-2">
+            Timestamp: unknown
+        </p>
+        <p id="temperature" class="text-gray-700 mt-2">
+            Temperature: unknown
+        </p>
+        <p id="humidity" class="text-gray-700 mt-2">
+            Humidity: unknown
+        </p>
+        <p id="illuminance" class="text-gray-700 mt-2">
+            Illuminance: unknown
+        </p>
+        <p id="nextRefreshAt" class="text-gray-700 mt-2 border-t border-slate-200">
+            Next refresh at: unknown
+        </p>
+    </div>
+    </div>
 
-                <script>
-                  const measurementPath = "/flowerpot/measurement";
-                  const refreshInterval = 10_000;
+    <!-- About -->
+    <div id="about" class="hidden">
+      <h2 class="text-lg font-semibold">About</h2>
+      <p class="text-gray-700 mt-2">This is a simple about page for the app.</p>
+    </div>
+  </main>
 
-                  async function getMeasurements() {
-                    try {
-                      const measurementResponse = await fetch(measurementPath);
+  <!-- Navigation Menu -->
+  <nav class="bg-white shadow-md border-t">
+    <div class="flex justify-around">
+      <button class="flex-1 p-4 text-center text-gray-600 hover:bg-blue-100" onclick="showView('dashboard')">
+        Dashboard
+      </button>
+      <button class="flex-1 p-4 text-center text-gray-600 hover:bg-blue-100" onclick="showView('about')">
+        About
+      </button>
+    </div>
+  </nav>
 
-                      if (!measurementResponse.ok) {
-                        throw new Error(`Response status: ${measurementResponse.status}`);
-                      }
+  <script>
+    // JavaScript to handle view switching
+    function showView(view) {
+      // Hide all views
+      document.querySelectorAll('#content > div').forEach(div => {
+        div.classList.add('hidden');
+      });
 
-                      const measurementResponseModel = await measurementResponse.json();
+      // Show selected view
+      document.getElementById(view).classList.remove('hidden');
+    }
 
-                      return measurementResponseModel.Measurements;
-                    } catch (error) {
-                        console.error(error.message);
-                    }
-                  }
+    // Show Dashboard by default
+    document.addEventListener('DOMContentLoaded', () => {
+      showView('dashboard');
+    });
+  </script>
 
-                  async function refresh() {
-                    const measurements = await getMeasurements();
+  <script>
+    const measurementPath = "/flowerpot/measurement";
+    const refreshInterval = 10_000;
 
-                    const measurement = measurements[measurements.length - 1];
+    async function getMeasurements() {
+      try {
+        const measurementResponse = await fetch(measurementPath);
 
-                    document.getElementById("timestamp").innerText = `Timestamp: ${new Date(measurement.Timestamp).toLocaleTimeString()}`;
-                    document.getElementById("temperature").innerText = `Temperature: ${measurement.Temperature}`;
-                    document.getElementById("humidity").innerText = `Humidity: ${measurement.Humidity}`;
-                    document.getElementById("illuminance").innerText = `Illuminance: ${measurement.Illuminance}`;
+        if (!measurementResponse.ok) {
+          throw new Error(`Response status: ${measurementResponse.status}`);
+        }
 
-                    document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
-                  }
+        const measurementResponseModel = await measurementResponse.json();
 
-                  const interval = setInterval(refresh, refreshInterval);
+        return measurementResponseModel.Measurements;
+      } catch (error) {
+          console.error(error.message);
+      }
+    }
 
-                  document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
-                </script>
-            </div>
-            </main>
-        </div>
-    </body>
+    async function refresh() {
+      const measurements = await getMeasurements();
+
+      const measurement = measurements[measurements.length - 1];
+
+      document.getElementById("timestamp").innerText = `Timestamp: ${new Date(measurement.Timestamp).toLocaleTimeString()}`;
+      document.getElementById("temperature").innerText = `Temperature: ${measurement.Temperature}`;
+      document.getElementById("humidity").innerText = `Humidity: ${measurement.Humidity}`;
+      document.getElementById("illuminance").innerText = `Illuminance: ${measurement.Illuminance}`;
+
+      document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
+    }
+
+    const interval = setInterval(refresh, refreshInterval);
+
+    document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
+  </script>
+</body>
+
 </html>
