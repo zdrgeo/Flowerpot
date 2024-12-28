@@ -104,9 +104,9 @@
       const measurement = measurements[measurements.length - 1];
 
       document.getElementById("timestamp").innerText = `Timestamp: ${new Date(measurement.Timestamp).toLocaleTimeString()}`;
-      document.getElementById("temperature").innerText = `Temperature: ${measurement.Temperature}`;
-      document.getElementById("humidity").innerText = `Humidity: ${measurement.Humidity}`;
-      document.getElementById("illuminance").innerText = `Illuminance: ${measurement.Illuminance}`;
+      document.getElementById("temperature").innerText = `Temperature: ${measurement.Temperature.toFixed(2)}`;
+      document.getElementById("humidity").innerText = `Humidity: ${measurement.Humidity.toFixed(2)}`;
+      document.getElementById("illuminance").innerText = `Illuminance: ${measurement.Illuminance.toFixed(2)}`;
 
       document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
     }
