@@ -7,8 +7,25 @@
   <title>Flowerpot</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <!--
-  Please create a simple mobile app shell using HTML, Tailwind CSS and JavaScript. The app shell should have a menu with items leading to two views - "Dashboard" and "About". On the Dashboard, display a card again using Tailwind CSS.
+  The mobile app shell (this file) is generated using ChatGPT 4o model with the following prompt:
+  "Create a simple mobile app shell using HTML, Tailwind CSS and JavaScript. The app shell should have a menu with items leading to two views - 'Dashboard' and 'About'. On the Dashboard view, display a card again using Tailwind CSS."
   -->
+  <style>
+
+/* Adding style for input box */
+input {
+    width: 30px;
+    padding: 1%;
+    font-size: larger;
+    text-align: center;
+    margin-left: 2%;
+}
+
+/* Adding style for display word*/
+#displayWord {
+    font-size: xx-large;
+}
+  </style>
 </head>
 
 <body class="bg-gray-100 h-screen flex flex-col">
@@ -21,8 +38,9 @@
   <main id="content" class="flex-1 overflow-y-auto p-4">
     <!-- Dashboard (default view) -->
     <div id="dashboard" class="hidden">
-      <div class="bg-white rounded-lg shadow-md p-4">
-        <h2 class="text-gray-700 font-semibold border-b border-slate-200">Last measurement</h2>
+      <!-- Card 1 -->
+      <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+        <h2 class="text-gray-700 font-semibold border-b border-slate-200">Last Measurement</h2>
         <p id="timestamp" class="text-gray-700 mt-2">
             Timestamp: unknown
         </p>
@@ -39,11 +57,22 @@
             Next refresh at: unknown
         </h3>
       </div>
+      <!-- Card 2 -->
       <div class="bg-white rounded-lg shadow-md p-4">
-        <h2 class="text-gray-700 font-semibold border-b border-slate-200">Last 5 measurements</h2>
-        <div class="view">
+        <h2 class="text-gray-700 font-semibold border-b border-slate-200">Guess the Flower</h2>
+        <p id="displayWord" class="text-gray-700 mt-2"></p>
+        <div class="mt-4">
+          <label for="letter" class="text-gray-700 mt-2">Guess one letter:</label>
+          <input id="letter" type="text" maxlength="1" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300">
+          <button class="w-full mt-2 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-700" onclick="guessLetter()">Submit</button>
         </div>
       </div>
+      <!--
+      <div class="bg-white rounded-lg shadow-md p-4">
+        <h2 class="text-gray-700 font-semibold border-b border-slate-200">Last 5 measurements</h2>
+        <div id="view"></div>
+      </div>
+      -->
     </div>
 
     <!-- About -->
@@ -85,7 +114,7 @@
 
   <script>
     const measurementPath = "/flowerpot/measurement";
-    const refreshInterval = 10_000;
+    const refreshInterval = 5_000;
 
     async function getMeasurements() {
       try {
@@ -109,9 +138,9 @@
       const measurement = measurements[measurements.length - 1];
 
       document.getElementById("timestamp").innerText = `Timestamp: ${new Date(measurement.Timestamp).toLocaleTimeString()}`;
-      document.getElementById("temperature").innerText = `Temperature: ${measurement.Temperature.toFixed(2)}`;
-      document.getElementById("humidity").innerText = `Humidity: ${measurement.Humidity.toFixed(2)}`;
-      document.getElementById("illuminance").innerText = `Illuminance: ${measurement.Illuminance.toFixed(2)}`;
+      document.getElementById("temperature").innerText = `Temperature: ${measurement.Temperature.toFixed(2)}°C`;
+      document.getElementById("humidity").innerText = `Humidity: ${measurement.Humidity.toFixed(2)}%`;
+      document.getElementById("illuminance").innerText = `Illuminance: ${measurement.Illuminance.toFixed(2)}lx`;
 
       document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
     }
@@ -121,28 +150,144 @@
     document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
   </script>
 
+<!--
   <script type="module">
     import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
 
     const x = d3
       .scaleLinear()
-      .domain([0, 4])
-      .range([0, 200]);
+      .domain([0, 10])
+      .range([0, 300]);
 
     const y = d3
       .scaleLinear()
-      .domain([0, 4])
-      .range([0, 200]);
+      .domain([0, 100])
+      .range([200, 0]);
 
     const svg = d3
-      .select('.view')
-      .append('svg');
+      .select('#view')
+      .append('svg')
+      .attr('width', 340)
+      .attr('height', 240);
 
     svg
       .append('g')
-      .attr("transform", `translate(0, 0)`)
+      .attr("transform", `translate(20, 220)`)
       .call(d3.axisBottom(x));
-  </script>
+
+    svg
+      .append('g')
+      .attr("transform", `translate(20, 20)`)
+      .call(d3.axisLeft(y));
+
+    const values = await getMeasurements().map((measurement, index) => ({
+      index: index,
+      value: measurement.Temperature
+    }));
+
+    console.log(values);
+
+    svg
+      .append("path")
+      .data(values)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+          .x(function(d) { return x(d.index) })
+          .y(function(d) { return y(d.value) })
+        )
+</script>
+-->
+<script>
+  // script.js
+
+// Array of words to choose from
+const words = [
+  "amaryllis",
+  "anemone",
+  "daffodil",
+  "daisy",
+  "gerberas",
+  "hyacinth",
+  "iris",
+  "jasmine",
+  "lavender",
+  "lily",
+  "magnolia",
+  "marigold",
+  "orchid",
+  "peony",
+  "petunia",
+  "poppy",
+  "rose",
+  "sunflower",
+  "tulip",
+];
+
+// Geting random word from the list
+let randomIndex = Math.floor(Math.random() * words.length);
+let selectedWord = words[randomIndex];
+console.log(selectedWord);
+
+// To store the already guessed letters
+let guessedLetters = [];
+
+// For initial display Word
+let displayWord = "";
+for (let i = 0; i < selectedWord.length; i++) {
+    displayWord += "_ ";
+}
+document.getElementById("displayWord").textContent = displayWord;
+
+// Function to check Guessed letter
+function guessLetter() {
+    let inputElement = 
+        document.getElementById("letter");
+
+    // To check empty input
+    if (!inputElement.value) {
+        alert("Empty Input box. Please add input letter");
+        inputElement.focus();
+        return;
+    }
+
+    let letter = inputElement.value.toLowerCase();
+
+    // Clear the input field
+    inputElement.value = "";
+
+    // Check if the letter has already been guessed
+    if (guessedLetters.includes(letter)) {
+        alert("You have already guessed that letter!");
+        inputElement.focus();
+        return;
+    }
+
+    // Add the letter to the guessed letters array
+    guessedLetters.push(letter);
+
+    // Update the word display based on the guessed letters
+    let updatedDisplay = "";
+    let allLettersGuessed = true;
+    for (let i = 0; i < selectedWord.length; i++) {
+        if (guessedLetters.includes(selectedWord[i])) {
+            updatedDisplay += selectedWord[i] + " ";
+        } else {
+            updatedDisplay += "_ ";
+            allLettersGuessed = false;
+        }
+    }
+    document.getElementById("displayWord")
+        .textContent = updatedDisplay;
+
+    // Check if all letters have been guessed
+    if (allLettersGuessed) {
+        alert("Congratulations! You guessed the word correctly!");
+    }
+    inputElement.focus();
+}
+</script>
 </body>
 
 </html>
