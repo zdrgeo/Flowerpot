@@ -38,6 +38,7 @@ input {
   <main id="content" class="flex-1 overflow-y-auto p-4">
     <!-- Dashboard (default view) -->
     <div id="dashboard" class="hidden">
+
       <!-- Card 1 -->
       <div class="bg-white rounded-lg shadow-md p-4 mb-4">
         <h2 class="text-gray-700 font-semibold border-b border-slate-200">Last Measurement</h2>
@@ -57,6 +58,7 @@ input {
             Next refresh at: unknown
         </h3>
       </div>
+
       <!-- Card 2 -->
       <div class="bg-white rounded-lg shadow-md p-4">
         <h2 class="text-gray-700 font-semibold border-b border-slate-200">Guess the Flower</h2>
@@ -67,12 +69,7 @@ input {
           <button class="w-full mt-2 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-700" onclick="guessLetter()">Submit</button>
         </div>
       </div>
-      <!--
-      <div class="bg-white rounded-lg shadow-md p-4">
-        <h2 class="text-gray-700 font-semibold border-b border-slate-200">Last 5 measurements</h2>
-        <div id="view"></div>
-      </div>
-      -->
+
     </div>
 
     <!-- About -->
@@ -149,57 +146,7 @@ input {
 
     document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
   </script>
-
-<!--
-  <script type="module">
-    import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7/+esm';
-
-    const x = d3
-      .scaleLinear()
-      .domain([0, 10])
-      .range([0, 300]);
-
-    const y = d3
-      .scaleLinear()
-      .domain([0, 100])
-      .range([200, 0]);
-
-    const svg = d3
-      .select('#view')
-      .append('svg')
-      .attr('width', 340)
-      .attr('height', 240);
-
-    svg
-      .append('g')
-      .attr("transform", `translate(20, 220)`)
-      .call(d3.axisBottom(x));
-
-    svg
-      .append('g')
-      .attr("transform", `translate(20, 20)`)
-      .call(d3.axisLeft(y));
-
-    const values = await getMeasurements().map((measurement, index) => ({
-      index: index,
-      value: measurement.Temperature
-    }));
-
-    console.log(values);
-
-    svg
-      .append("path")
-      .data(values)
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr("d", d3.line()
-          .x(function(d) { return x(d.index) })
-          .y(function(d) { return y(d.value) })
-        )
-</script>
--->
-<script>
+  <script>
   // script.js
 
 // Array of words to choose from
@@ -287,7 +234,6 @@ function guessLetter() {
     }
     inputElement.focus();
 }
-</script>
+  </script>
 </body>
-
 </html>
