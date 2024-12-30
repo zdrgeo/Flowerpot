@@ -42,7 +42,7 @@ public class TelemetryService(DeviceClient deviceClient, IOptions<TelemetryServi
         {
             // PnpConvention.CreateMessage()
 
-            using var message = new Message(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(eventModel)))
+            using Message message = new (Encoding.UTF8.GetBytes(JsonSerializer.Serialize(eventModel)))
             {
                 ContentType = "application/json",
                 ContentEncoding = "utf-8",
