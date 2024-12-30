@@ -51,6 +51,8 @@ public class TelemetryService(DeviceClient deviceClient, IOptions<TelemetryServi
             message.Properties.Add("temperatureAlert", RaiseTemperatureAlert(eventModel.Temperature) ? "true" : "false");
             message.Properties.Add("humidityAlert", RaiseHumidityAlert(eventModel.Humidity) ? "true" : "false");
             message.Properties.Add("illuminanceAlert", RaiseIlluminanceAlert(eventModel.Illuminance) ? "true" : "false");
+
+            messages.Add(message);
         }
 
         await deviceClient.SendEventBatchAsync(messages, cancellationToken);
