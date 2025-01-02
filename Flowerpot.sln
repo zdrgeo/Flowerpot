@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.Services", "Device.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.Services.Azure.IoTHub", "Device.Services.Azure.IoTHub\Device.Services.Azure.IoTHub.csproj", "{751744B4-5676-4594-B1CA-795938ECBFBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.Services.Azure.EventGrid", "Device.Services.Azure.EventGrid\Device.Services.Azure.EventGrid.csproj", "{FCF86E60-0273-4656-82D3-7D0BFA5D2891}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.Services.Azure.Relay", "Device.Services.Azure.Relay\Device.Services.Azure.Relay.csproj", "{801E34F7-7B43-4366-BDA5-0185E601894A}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{751744B4-5676-4594-B1CA-795938ECBFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{751744B4-5676-4594-B1CA-795938ECBFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{751744B4-5676-4594-B1CA-795938ECBFBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FCF86E60-0273-4656-82D3-7D0BFA5D2891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FCF86E60-0273-4656-82D3-7D0BFA5D2891}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FCF86E60-0273-4656-82D3-7D0BFA5D2891}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FCF86E60-0273-4656-82D3-7D0BFA5D2891}.Release|Any CPU.Build.0 = Release|Any CPU
 		{801E34F7-7B43-4366-BDA5-0185E601894A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{801E34F7-7B43-4366-BDA5-0185E601894A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{801E34F7-7B43-4366-BDA5-0185E601894A}.Release|Any CPU.ActiveCfg = Release|Any CPU

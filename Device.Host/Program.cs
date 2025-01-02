@@ -4,7 +4,6 @@ using Microsoft.Extensions.Azure;
 using Device.Host;
 using Device.Services;
 // using Device.Services.Azure.IoTHub;
-// using Device.Services.Azure.EventGrid;
 using Device.Services.Azure.Relay;
 
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
@@ -15,10 +14,6 @@ builder.Services.AddAzureClients(
     clientBuilder =>
     {
         clientBuilder.UseCredential(new DefaultAzureCredential());
-
-        // Azure Event Grid
-        // clientBuilder.AddEventGridPublisherClient(new Uri("<endpoint>"), new AzureKeyCredential("<access-key>"));
-        // Azure Event Grid
     }
 );
 
@@ -30,11 +25,6 @@ builder.Services.AddAzureClients(
 // // builder.Services.AddSingleton<IDeviceService, DeviceService>();
 // builder.Services.AddSingleton<IDeviceService, ProvisioningDeviceService>();
 // Azure IoT Hub
-
-// Azure Event Grid
-// builder.Services.AddSingleton<ITelemetryService, TelemetryService>();
-// builder.Services.AddSingleton<IDeviceService, DeviceService>();
-// Azure Event Grid
 
 // Azure Relay
 builder.Services.AddSingleton<IDeviceService, DeviceService>();
