@@ -1,6 +1,8 @@
 namespace Device.Services.Sensors;
 
+public readonly record struct HumidityMeasurment(DateTimeOffset Timestamp, double Value);
+
 public interface IHumiditySensor
 {
-    Task<double> MeasureAsync(CancellationToken cancellationToken);
+    Task<HumidityMeasurment> MeasureAsync(CancellationToken cancellationToken);
 }
