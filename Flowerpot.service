@@ -4,7 +4,7 @@ Description=Flowerpot service
 [Service]
 Type=notify
 WorkingDirectory=/usr/local/Flowerpot
-ExecStart=/home/zdrgeo/.dotnet/dotnet /usr/local/Flowerpot/Flowerpot.dll
+ExecStart=/home/zdrgeo/.dotnet/dotnet /usr/local/Flowerpot/Device.Host.dll
 User=zdrgeo
 Restart=always
 RestartSec=5
