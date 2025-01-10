@@ -1,0 +1,15 @@
+[Unit]
+Description=Flowerpot service
+
+[Service]
+Type=notify
+WorkingDirectory=/usr/local/Flowerpot
+ExecStart=/home/zdrgeo/.dotnet/dotnet /usr/local/Flowerpot/Flowerpot.dll
+User=zdrgeo
+Restart=always
+RestartSec=5
+SyslogIdentifier=Flowerpot
+Environment=DOTNET_ROOT=/home/zdrgeo/.dotnet
+
+[Install]
+WantedBy=multi-user.target

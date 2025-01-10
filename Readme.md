@@ -1,21 +1,44 @@
 # Flowerpot
 
+#### Structure
+
 ```mermaid
 graph TD
-    A[App] --> AR[Azure Relay] --> D[Device with Sensors]
-```
-
-### Architecture
-```mermaid
-architecture-beta
-    group flowerpot[Flowerpot]
-
-    service app(server)[App] in flowerpot
-    service azure_relay(cloud)[Azure Relay] in flowerpot
-    service device(server)[Device with Sensors] in flowerpot
-
-    app:R -- L:azure_relay
-    azure_relay:R -- L:device
+    A[Flowerpot App] --> AR[Azure Relay] --> D[Flowerpot Device with Sensors]
 ```
 
 ### Circuit
+
+### Service
+
+#### Status
+
+```shell
+sudo systemctl status Flowerpot
+
+sudo journalctl -u Flowerpot -f
+```
+
+#### Deployment
+
+```shell
+sudo systemctl stop Flowerpot
+
+dotnet publish Device.Host -c Release -o /usr/local/Flowerpot
+
+sudo cp Flowerpot.service /etc/systemd/system/Flowerpot.service
+
+sudo systemctl daemon-reload
+
+sudo systemctl start Flowerpot
+```
+
+### Docker
+
+#### Deployment
+
+```shell
+dotnet publish --os linux --arch arm /t:PublishContainer
+
+docker run -d --restart unless-stopped flowerpot
+```
