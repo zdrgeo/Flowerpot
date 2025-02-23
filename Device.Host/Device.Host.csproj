@@ -16,6 +16,5 @@
 
   <ItemGroup>
     <ProjectReference Include="../Device.Services.Azure.Relay/Device.Services.Azure.Relay.csproj" />
-    <ProjectReference Include="../Device.Services/Device.Services.csproj" />
   </ItemGroup>
 </Project>

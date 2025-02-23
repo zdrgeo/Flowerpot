@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Net;
 using System.Text.Json;
+using Device.Sensors;
 using Microsoft.Azure.Relay;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -21,8 +22,17 @@ public class DeviceServiceOptions
     public required int MeasurementsCount { get; set; } = 10;
 }
 
-public class DeviceService(IOptions<DeviceServiceOptions> options, ILogger<DeviceService> logger) : IDeviceService
+public class DeviceService(
+    ITemperatureSensor temperatureSensor,
+    IHumiditySensor humiditySensor,
+    IIlluminanceSensor illuminanceSensor,
+    IOptions<DeviceServiceOptions> options,
+    ILogger<DeviceService> logger
+) : IDeviceService
 {
+    private readonly ITemperatureSensor temperatureSensor = temperatureSensor ?? throw new ArgumentNullException(nameof(temperatureSensor));
+    private readonly IHumiditySensor humiditySensor = humiditySensor ?? throw new ArgumentNullException(nameof(humiditySensor));
+    private readonly IIlluminanceSensor illuminanceSensor = illuminanceSensor ?? throw new ArgumentNullException(nameof(illuminanceSensor));
     private readonly IOptions<DeviceServiceOptions> options = options ?? throw new ArgumentNullException(nameof(options));
     private readonly ILogger<DeviceService> logger = logger;
     readonly Lock measurementsLock = new ();
@@ -58,9 +68,9 @@ public class DeviceService(IOptions<DeviceServiceOptions> options, ILogger<Devic
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
             // Reading sensors data...
-            double temperature = Random.Shared.NextDouble() * 100;
-            double humidity = Random.Shared.NextDouble() * 100;
-            double illuminance = Random.Shared.NextDouble() * 100;
+            double temperature = (await temperatureSensor.MeasureAsync(cancellationToken)).Value;
+            double humidity = (await humiditySensor.MeasureAsync(cancellationToken)).Value;
+            double illuminance = (await illuminanceSensor.MeasureAsync(cancellationToken)).Value;
             // Reading sensors data...
 
             lock (measurementsLock)

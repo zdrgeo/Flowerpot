@@ -3,12 +3,12 @@ using Iot.Device.Ads1115;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Device.Services.Sensors;
+namespace Device.Sensors;
 
 public class MockTemperatureSensorOptions
 {
-    public double MinValue { get; set; } = 0;
-    public double MaxValue { get; set; } = 100;
+    public double MinValue { get; set; } = 20;
+    public double MaxValue { get; set; } = 25;
 }
 
 public class MockTemperatureSensor(IOptions<MockTemperatureSensorOptions> options, ILogger<MockTemperatureSensor> logger) : ITemperatureSensor 

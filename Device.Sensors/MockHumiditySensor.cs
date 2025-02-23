@@ -3,12 +3,12 @@ using Iot.Device.Ads1115;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Device.Services.Sensors;
+namespace Device.Sensors;
 
 public class MockHumiditySensorOptions
 {
-    public double MinValue { get; set; } = 0;
-    public double MaxValue { get; set; } = 100;
+    public double MinValue { get; set; } = 40;
+    public double MaxValue { get; set; } = 60;
 }
 
 public class MockHumiditySensor(IOptions<MockHumiditySensorOptions> options, ILogger<MockHumiditySensor> logger) : IHumiditySensor 

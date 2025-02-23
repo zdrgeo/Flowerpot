@@ -1,4 +1,4 @@
-namespace Device.Services.Sensors;
+namespace Device.Sensors;
 
 public readonly record struct IlluminanceMeasurment(DateTimeOffset Timestamp, double Value);
 

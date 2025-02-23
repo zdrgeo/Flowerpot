@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.Services", "Device.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.Services.Azure.Relay", "Device.Services.Azure.Relay\Device.Services.Azure.Relay.csproj", "{801E34F7-7B43-4366-BDA5-0185E601894A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.Sensors", "Device.Sensors\Device.Sensors.csproj", "{8D5B4986-0823-4EC2-87F6-AEE106109FA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{801E34F7-7B43-4366-BDA5-0185E601894A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{801E34F7-7B43-4366-BDA5-0185E601894A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{801E34F7-7B43-4366-BDA5-0185E601894A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D5B4986-0823-4EC2-87F6-AEE106109FA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D5B4986-0823-4EC2-87F6-AEE106109FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D5B4986-0823-4EC2-87F6-AEE106109FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D5B4986-0823-4EC2-87F6-AEE106109FA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

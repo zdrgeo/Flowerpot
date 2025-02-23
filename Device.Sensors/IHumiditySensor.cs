@@ -1,4 +1,4 @@
-namespace Device.Services.Sensors;
+namespace Device.Sensors;
 
 public readonly record struct HumidityMeasurment(DateTimeOffset Timestamp, double Value);
 
