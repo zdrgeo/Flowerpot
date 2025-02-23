@@ -11,7 +11,7 @@ public class HumiditySensor(IOptions<HumiditySensorOptions> options, ILogger<Hum
 {
     private readonly IOptions<HumiditySensorOptions> options = options ?? throw new ArgumentNullException(nameof(options));
     private readonly ILogger<HumiditySensor> logger = logger;
-    const int busId = 2;
+    const int busId = 1;
 
     public Task<HumidityMeasurment> MeasureAsync(CancellationToken cancellationToken)
     {
