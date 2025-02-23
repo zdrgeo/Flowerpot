@@ -17,7 +17,7 @@ public class HumiditySensor(IOptions<HumiditySensorOptions> options, ILogger<Hum
     {
         I2cConnectionSettings connectionSettings = new (busId, (int)I2cAddress.GND);
 
-        I2cDevice device = I2cDevice.Create(connectionSettings);
+        using I2cDevice device = I2cDevice.Create(connectionSettings);
 
         using Ads1115 adc = new (device, InputMultiplexer.AIN3, MeasuringRange.FS4096);
 
