@@ -23,9 +23,9 @@ public class HumiditySensor(IOptions<HumiditySensorOptions> options, ILogger<Hum
         I2cDevice device = I2cDevice.Create(connectionSettings);
 
         // pass in I2cDevice
-        // measure the voltage AIN0
-        // set the maximum range to 6.144V
-        using Ads1115 adc = new (device, InputMultiplexer.AIN0, MeasuringRange.FS6144);
+        // measure the voltage AIN3
+        // set the maximum range to 4.096V
+        using Ads1115 adc = new (device, InputMultiplexer.AIN3, MeasuringRange.FS4096);
 
         // read raw data from the sensor
         short raw = adc.ReadRaw();
