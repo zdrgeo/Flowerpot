@@ -19,11 +19,11 @@ public class HumiditySensor(IOptions<HumiditySensorOptions> options, ILogger<Hum
 
         using I2cDevice device = I2cDevice.Create(connectionSettings);
 
-        using Ads1115 adc = new (device, InputMultiplexer.AIN3, MeasuringRange.FS4096);
+        using Ads1115 ads1115 = new (device, InputMultiplexer.AIN3, MeasuringRange.FS4096);
 
-        short raw = adc.ReadRaw();
+        short raw = ads1115.ReadRaw();
 
-        double value = adc.RawToVoltage(raw).Volts;
+        double value = ads1115.RawToVoltage(raw).Volts;
 
         HumidityMeasurment measurment = new (DateTimeOffset.UtcNow, value);
 
