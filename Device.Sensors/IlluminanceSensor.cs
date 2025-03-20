@@ -8,19 +8,29 @@ namespace Device.Sensors;
 
 public class IlluminanceSensorOptions {}
 
-public class IlluminanceSensor(IOptions<IlluminanceSensorOptions> options, ILogger<IlluminanceSensor> logger) : IIlluminanceSensor
+public class IlluminanceSensor : IIlluminanceSensor, IDisposable
 {
-    private readonly IOptions<IlluminanceSensorOptions> options = options ?? throw new ArgumentNullException(nameof(options));
-    private readonly ILogger<IlluminanceSensor> logger = logger;
+    public IlluminanceSensor(IOptions<IlluminanceSensorOptions> options, ILogger<IlluminanceSensor> logger)
+    {
+        this.options = options ?? throw new ArgumentNullException(nameof(options));
+        this.logger = logger;
+
+        I2cConnectionSettings connectionSettings = new (busId, (int)I2cAddress.AddPinLow);
+
+        device = I2cDevice.Create(connectionSettings);
+
+        bh1750fvi = new (device);
+    }
+
     const int busId = 1;
+    private readonly IOptions<IlluminanceSensorOptions> options;
+    private readonly ILogger<IlluminanceSensor> logger;
+    private readonly I2cDevice device;
+    private readonly Bh1750fvi bh1750fvi;
+    private bool disposed;
 
     public Task<IlluminanceMeasurment> MeasureAsync(CancellationToken cancellationToken)
     {
-        I2cConnectionSettings connectionSettings = new (busId, (int)I2cAddress.AddPinLow);
-
-        using I2cDevice device = I2cDevice.Create(connectionSettings);
-        using Bh1750fvi bh1750fvi = new (device);
-
         Illuminance illuminance = bh1750fvi.Illuminance;
 
         double value = illuminance.Value;
@@ -28,5 +38,26 @@ public class IlluminanceSensor(IOptions<IlluminanceSensorOptions> options, ILogg
         IlluminanceMeasurment measurment = new (DateTimeOffset.UtcNow, value);
 
         return Task.FromResult(measurment);
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposed)
+        {
+            if (disposing)
+            {
+                bh1750fvi?.Dispose();
+                device?.Dispose();
+            }
+
+            disposed = true;
+        }
     }
 }

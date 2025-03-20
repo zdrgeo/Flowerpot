@@ -24,4 +24,3 @@ builder.Services.AddHostedService<DeviceHostedService>();
 IHost host = builder.Build();
 
 host.Run();
-
