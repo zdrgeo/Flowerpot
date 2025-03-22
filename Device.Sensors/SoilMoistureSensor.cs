@@ -5,11 +5,11 @@ using Microsoft.Extensions.Options;
 
 namespace Device.Sensors;
 
-public class HumiditySensorOptions{ }
+public class SoilMoistureSensorOptions{ }
 
-public class HumiditySensor : IHumiditySensor, IDisposable
+public class SoilMoistureSensor : ISoilMoistureSensor, IDisposable
 {
-    public HumiditySensor(IOptions<HumiditySensorOptions> options, ILogger<HumiditySensor> logger)
+    public SoilMoistureSensor(IOptions<SoilMoistureSensorOptions> options, ILogger<SoilMoistureSensor> logger)
     {
         this.options = options ?? throw new ArgumentNullException(nameof(options));
         this.logger = logger;
@@ -22,19 +22,19 @@ public class HumiditySensor : IHumiditySensor, IDisposable
     }
 
     const int busId = 1;
-    private readonly IOptions<HumiditySensorOptions> options;
-    private readonly ILogger<HumiditySensor> logger;
+    private readonly IOptions<SoilMoistureSensorOptions> options;
+    private readonly ILogger<SoilMoistureSensor> logger;
     private readonly I2cDevice device;
     private readonly Ads1115 ads1115;
     private bool disposed;
 
-    public Task<HumidityMeasurment> MeasureAsync(CancellationToken cancellationToken)
+    public Task<SoilMoistureMeasurment> MeasureAsync(CancellationToken cancellationToken)
     {
         short raw = ads1115.ReadRaw();
 
         double value = ads1115.RawToVoltage(raw).Volts;
 
-        HumidityMeasurment measurment = new (DateTimeOffset.UtcNow, value);
+        SoilMoistureMeasurment measurment = new (DateTimeOffset.UtcNow, value);
 
         return Task.FromResult(measurment);
     }

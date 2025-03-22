@@ -48,8 +48,8 @@ input {
         <p id="temperature" class="text-gray-700 mt-2">
             Temperature: unknown
         </p>
-        <p id="humidity" class="text-gray-700 mt-2">
-            Humidity: unknown
+        <p id="soilMoisture" class="text-gray-700 mt-2">
+          Soil Moisture: unknown
         </p>
         <p id="illuminance" class="text-gray-700 mt-2">
             Illuminance: unknown
@@ -137,7 +137,7 @@ input {
 
       document.getElementById("timestamp").innerText = `Timestamp: ${new Date(measurement.Timestamp).toLocaleTimeString()}`;
       document.getElementById("temperature").innerText = `Temperature: ${measurement.Temperature.toFixed(2)}°C`;
-      document.getElementById("humidity").innerText = `Humidity: ${measurement.Humidity.toFixed(2)}%`;
+      document.getElementById("soilMoisture").innerText = `Soil Moisture: ${measurement.SoilMoisture.toFixed(2)}%`;
       document.getElementById("illuminance").innerText = `Illuminance: ${measurement.Illuminance.toFixed(2)}lx`;
 
       document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
