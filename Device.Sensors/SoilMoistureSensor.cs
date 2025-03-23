@@ -5,7 +5,11 @@ using Microsoft.Extensions.Options;
 
 namespace Device.Sensors;
 
-public class SoilMoistureSensorOptions{ }
+public class SoilMoistureSensorOptions
+{
+    public double MinVoltage { get; set; } = 0;
+    public double MaxVoltage { get; set; } = 3.3;
+}
 
 public class SoilMoistureSensor : ISoilMoistureSensor, IDisposable
 {
@@ -32,7 +36,9 @@ public class SoilMoistureSensor : ISoilMoistureSensor, IDisposable
     {
         short raw = ads1115.ReadRaw();
 
-        double value = ads1115.RawToVoltage(raw).Volts;
+        double voltage = ads1115.RawToVoltage(raw).Volts;
+
+        double value = (voltage - options.Value.MinVoltage) / (options.Value.MaxVoltage - options.Value.MinVoltage) * 100;
 
         SoilMoistureMeasurment measurment = new (DateTimeOffset.UtcNow, value);
 
