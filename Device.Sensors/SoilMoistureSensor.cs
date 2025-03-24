@@ -50,7 +50,7 @@ public class SoilMoistureSensor : ISoilMoistureSensor, IDisposable
             voltage = options.Value.MaxVoltage;
         }
 
-        double value = (voltage - options.Value.MinVoltage) / (options.Value.MaxVoltage - options.Value.MinVoltage) * 100;
+        double value = (options.Value.MaxVoltage - voltage) / (options.Value.MaxVoltage - options.Value.MinVoltage) * 100;
 
         SoilMoistureMeasurment measurment = new (DateTimeOffset.UtcNow, value);
 
