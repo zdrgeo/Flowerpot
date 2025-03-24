@@ -8,7 +8,7 @@ namespace Device.Sensors;
 public class MockIlluminanceSensorOptions
 {
     public double MinValue { get; set; } = 50;
-    public double MaxValue { get; set; } = 150;
+    public double MaxValue { get; set; } = 500;
 }
 
 public class MockIlluminanceSensor(IOptions<MockIlluminanceSensorOptions> options, ILogger<MockIlluminanceSensor> logger) : IIlluminanceSensor 
