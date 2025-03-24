@@ -8,7 +8,7 @@ namespace Device.Sensors;
 public class SoilMoistureSensorOptions
 {
     public double MinVoltage { get; set; } = 0;
-    public double MaxVoltage { get; set; } = 3.3;
+    public double MaxVoltage { get; set; } = 5;
 }
 
 public class SoilMoistureSensor : ISoilMoistureSensor, IDisposable
@@ -22,7 +22,7 @@ public class SoilMoistureSensor : ISoilMoistureSensor, IDisposable
 
         device = I2cDevice.Create(connectionSettings);
 
-        ads1115 = new (device, InputMultiplexer.AIN3, MeasuringRange.FS4096);
+        ads1115 = new (device, InputMultiplexer.AIN3, MeasuringRange.FS6144);
     }
 
     const int busId = 1;
@@ -34,9 +34,21 @@ public class SoilMoistureSensor : ISoilMoistureSensor, IDisposable
 
     public Task<SoilMoistureMeasurment> MeasureAsync(CancellationToken cancellationToken)
     {
-        short raw = ads1115.ReadRaw();
+        double voltage = ads1115.ReadVoltage().Volts;
 
-        double voltage = ads1115.RawToVoltage(raw).Volts;
+        if (voltage < options.Value.MinVoltage)
+        {
+            voltage = options.Value.MinVoltage;
+
+            logger.LogWarning($"Voltage {voltage} below minimum {options.Value.MinVoltage}.");
+        }
+
+        if (voltage > options.Value.MaxVoltage)
+        {
+            voltage = options.Value.MaxVoltage;
+
+            logger.LogWarning($"Voltage {voltage} above maximum {options.Value.MaxVoltage}.");
+        }
 
         double value = (voltage - options.Value.MinVoltage) / (options.Value.MaxVoltage - options.Value.MinVoltage) * 100;
 
