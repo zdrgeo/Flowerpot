@@ -38,16 +38,16 @@ public class SoilMoistureSensor : ISoilMoistureSensor, IDisposable
 
         if (voltage < options.Value.MinVoltage)
         {
-            voltage = options.Value.MinVoltage;
-
             logger.LogWarning($"Voltage {voltage} below minimum {options.Value.MinVoltage}.");
+
+            voltage = options.Value.MinVoltage;
         }
 
         if (voltage > options.Value.MaxVoltage)
         {
-            voltage = options.Value.MaxVoltage;
-
             logger.LogWarning($"Voltage {voltage} above maximum {options.Value.MaxVoltage}.");
+
+            voltage = options.Value.MaxVoltage;
         }
 
         double value = (voltage - options.Value.MinVoltage) / (options.Value.MaxVoltage - options.Value.MinVoltage) * 100;
