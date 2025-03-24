@@ -26,6 +26,8 @@ sudo systemctl stop Flowerpot
 
 dotnet publish Device.Host -c Release -o /usr/local/Flowerpot
 
+cp Device.Host/appsettings.* /usr/local/Flowerpot
+
 sudo cp Flowerpot.service /etc/systemd/system/Flowerpot.service
 
 sudo systemctl daemon-reload
