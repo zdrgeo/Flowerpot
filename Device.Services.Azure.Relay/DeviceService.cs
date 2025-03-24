@@ -18,7 +18,7 @@ readonly record struct MeasurementResponseModel()
 public class DeviceServiceOptions
 {
     public required string ConnectionString { get; set; }
-    public required TimeSpan MeasurementsInterval { get; set; } = TimeSpan.FromMinutes(1);
+    public required TimeSpan MeasurementsInterval { get; set; } = TimeSpan.FromSeconds(5);
     public required int MeasurementsCount { get; set; } = 10;
 }
 
