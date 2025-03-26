@@ -45,19 +45,19 @@ input {
       <div class="bg-green-100 rounded-lg shadow-md p-4 mb-4">
         <h2 class="text-green-700 font-semibold border-b border-slate-200">Last Measurement</h2>
         <p id="timestamp" class="text-green-700 mt-2">
-            Timestamp: unknown
+          Timestamp: <i>unknown</i>
         </p>
         <p id="temperature" class="text-green-700 mt-2">
-            Temperature: unknown
+          Temperature: <i>unknown</i>
         </p>
         <p id="soilMoisture" class="text-green-700 mt-2">
-          Soil Moisture: unknown
+          Soil Moisture: <i>unknown</i>
         </p>
         <p id="illuminance" class="text-green-700 mt-2">
-            Illuminance: unknown
+          Illuminance: <i>unknown</i>
         </p>
         <h3 id="nextRefreshAt" class="text-green-700 mt-2 border-t border-slate-200">
-            Next refresh at: unknown
+          Next refresh at: <i>unknown</i>
         </h3>
       </div>
 
@@ -139,10 +139,10 @@ input {
 
       const measurement = measurements[measurements.length - 1];
 
-      document.getElementById("timestamp").innerText = `Timestamp: ${new Date(measurement.Timestamp).toLocaleTimeString()}`;
-      document.getElementById("temperature").innerText = `Temperature: ${measurement.Temperature.toFixed(2)}°C`;
-      document.getElementById("soilMoisture").innerText = `Soil Moisture: ${measurement.SoilMoisture.toFixed(2)}%`;
-      document.getElementById("illuminance").innerText = `Illuminance: ${measurement.Illuminance.toFixed(2)}lx`;
+      document.getElementById("timestamp").innerText = `Timestamp: <b>${new Date(measurement.Timestamp).toLocaleTimeString()}</b>`;
+      document.getElementById("temperature").innerText = `Temperature: <b>${measurement.Temperature.toFixed(2)}°C</b>`;
+      document.getElementById("soilMoisture").innerText = `Soil Moisture: <b>${measurement.SoilMoisture.toFixed(2)}%</b>`;
+      document.getElementById("illuminance").innerText = `Illuminance: <b>${measurement.Illuminance.toFixed(2)}lx</b>`;
 
       document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
     }
