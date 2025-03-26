@@ -43,7 +43,7 @@ input {
 
       <!-- Last Measurement Card -->
       <div class="bg-green-100 rounded-lg shadow-md p-4 mb-4">
-        <h2 class="text-green-700 font-semibold border-b border-slate-200">Last Measurement</h2>
+        <h2 class="text-center text-green-700 font-semibold border-b border-slate-200">Last Measurement</h2>
         <p id="timestamp" class="text-green-700 mt-2">
           Timestamp: <i>unknown</i>
         </p>
@@ -56,14 +56,14 @@ input {
         <p id="illuminance" class="text-green-700 mt-2">
           Illuminance: <i>unknown</i>
         </p>
-        <h3 id="nextRefreshAt" class="text-green-700 mt-2 border-t border-slate-200">
-          Next refresh at: <i>unknown</i>
+        <h3 id="refreshAt" class="text-center text-green-700 mt-2 border-t border-slate-200">
+          Refresh at: <i>unknown</i>
         </h3>
       </div>
 
       <!-- Guess the Flower Card -->
       <div class="bg-green-100 rounded-lg shadow-md p-4">
-        <h2 class="text-green-700 font-semibold border-b border-slate-200">Guess the Flower</h2>
+        <h2 class="text-center text-green-700 font-semibold border-b border-slate-200">Guess the Flower</h2>
         <p id="displayWord" class="text-green-700 mt-2"></p>
         <div class="mt-4">
           <label for="letter" class="text-green-700 mt-2">Guess one letter:</label>
@@ -139,17 +139,17 @@ input {
 
       const measurement = measurements[measurements.length - 1];
 
-      document.getElementById("timestamp").innerText = `Timestamp: <b>${new Date(measurement.Timestamp).toLocaleTimeString()}</b>`;
-      document.getElementById("temperature").innerText = `Temperature: <b>${measurement.Temperature.toFixed(2)}°C</b>`;
-      document.getElementById("soilMoisture").innerText = `Soil Moisture: <b>${measurement.SoilMoisture.toFixed(2)}%</b>`;
-      document.getElementById("illuminance").innerText = `Illuminance: <b>${measurement.Illuminance.toFixed(2)}lx</b>`;
+      document.getElementById("timestamp").innerHTML = `Timestamp: <b>${new Date(measurement.Timestamp).toLocaleTimeString()}</b>`;
+      document.getElementById("temperature").innerHTML = `Temperature: <b>${measurement.Temperature.toFixed(2)}°C</b>`;
+      document.getElementById("soilMoisture").innerHTML = `Soil Moisture: <b>${measurement.SoilMoisture.toFixed(2)}%</b>`;
+      document.getElementById("illuminance").innerHTML = `Illuminance: <b>${measurement.Illuminance.toFixed(2)}lx</b>`;
 
-      document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
+      document.getElementById("refreshAt").innerHTML = `Refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
     }
 
     const interval = setInterval(refresh, refreshInterval);
 
-    document.getElementById("nextRefreshAt").innerText = `Next refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
+    document.getElementById("refreshAt").innerHTML = `Refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
   </script>
   <script>
     // JavaScript to handle the game logic
