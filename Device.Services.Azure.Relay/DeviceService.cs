@@ -40,6 +40,8 @@ public class DeviceService(
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
+        // Configure and start an HTTP server.
+        // The "application" endpoint serves the application UI (in HTML format), while the "measurement" endpoint serves the application data (in JSON format).
         HybridConnectionListener listener = new (options.Value.ConnectionString);
 
         listener.RequestHandler = async (context) => await (
@@ -52,6 +54,7 @@ public class DeviceService(
         );
 
         await listener.OpenAsync(cancellationToken);
+        // Configure and start an HTTP server.
 
         if (logger.IsEnabled(LogLevel.Information))
         {
@@ -67,12 +70,13 @@ public class DeviceService(
 
             DateTimeOffset timestamp = DateTimeOffset.UtcNow;
 
-            // Reading sensors data...
+            // Read the sensors' measurements.
             double temperature = (await temperatureSensor.MeasureAsync(cancellationToken)).Value;
             double soilMoisture = (await soilMoistureSensor.MeasureAsync(cancellationToken)).Value;
             double illuminance = (await illuminanceSensor.MeasureAsync(cancellationToken)).Value;
-            // Reading sensors data...
+            // Read the sensors' measurements.
 
+            // Save a series of the last few measurements.
             lock (measurementsLock)
             {
                 measurements.AddLast(new MeasurementModel(timestamp, temperature, soilMoisture, illuminance));
@@ -82,6 +86,7 @@ public class DeviceService(
                     measurements.RemoveFirst();
                 }
             }
+            // Save a series of the last few measurements.
 
             try { await Task.Delay(options.Value.MeasurementsInterval, cancellationToken); } catch (TaskCanceledException) { }
         }
@@ -89,6 +94,7 @@ public class DeviceService(
         await listener.CloseAsync(CancellationToken.None);
     }
 
+    // Handles the "application" endpoint returning the application UI in HTML format.
     private async Task HandleApplicationAsync(RelayedHttpListenerContext context)
     {
         context.Response.StatusCode = HttpStatusCode.OK;
@@ -102,6 +108,7 @@ public class DeviceService(
         await context.Response.CloseAsync();
     }
 
+    // Handles the "measurement" endpoint Returning the application data in JSON format.
     private async Task HandleMeasurementAsync(RelayedHttpListenerContext context)
     {
         // MeasurementRequestModel measurementRequest = await JsonSerializer.DeserializeAsync<MeasurementRequestModel>(context.Request.InputStream);
