@@ -1,4 +1,12 @@
-# Flowerpot
+# Flowerpot (later rebranded Project Bloom Pot)
+
+![Flowerpot](./Docs/Images//Flowerpot.png)
+
+Project Bloom Pot - 9a, 2025
+
+Prof. Ivan Apostolov
+
+English Language School
 
 #### Structure
 
@@ -8,6 +16,16 @@ graph TD
 ```
 
 ### Circuit
+
+### App
+
+Dashboard view
+
+![Flowerpot - Dashboard](./Docs/Images//Flowerpot_Dashboard.png)
+
+About view
+
+![Flowerpot - Dashboard](./Docs/Images//Flowerpot_About.png)
 
 ### Service
 
