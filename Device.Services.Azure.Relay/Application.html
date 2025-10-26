@@ -50,11 +50,14 @@ input {
         <p id="temperature" class="text-green-700 mt-2">
           Temperature: <i>unknown</i>
         </p>
-        <p id="soilMoisture" class="text-green-700 mt-2">
-          Soil Moisture: <i>unknown</i>
+        <p id="humidity" class="text-green-700 mt-2">
+          Humidity: <i>unknown</i>
         </p>
         <p id="illuminance" class="text-green-700 mt-2">
           Illuminance: <i>unknown</i>
+        </p>
+        <p id="soilMoisture" class="text-green-700 mt-2">
+          Soil Moisture: <i>unknown</i>
         </p>
         <h3 id="refreshAt" class="text-green-700 mt-2 border-t border-slate-200">
           Refresh at: <i>unknown</i>
@@ -141,8 +144,9 @@ input {
 
       document.getElementById("timestamp").innerHTML = `Timestamp: <b>${new Date(measurement.Timestamp).toLocaleTimeString()}</b>`;
       document.getElementById("temperature").innerHTML = `Temperature: <b>${measurement.Temperature.toFixed(2)}°C</b>`;
-      document.getElementById("soilMoisture").innerHTML = `Soil Moisture: <b>${measurement.SoilMoisture.toFixed(2)}%</b>`;
+      document.getElementById("humidity").innerHTML = `Humidity: <b>${measurement.Humidity.toFixed(2)}%</b>`;
       document.getElementById("illuminance").innerHTML = `Illuminance: <b>${measurement.Illuminance.toFixed(2)}lx</b>`;
+      document.getElementById("soilMoisture").innerHTML = `Soil Moisture: <b>${measurement.SoilMoisture.toFixed(2)}%</b>`;
 
       document.getElementById("refreshAt").innerHTML = `Refresh at: ${(new Date(Date.now() + refreshInterval)).toLocaleTimeString()}`;
     }
