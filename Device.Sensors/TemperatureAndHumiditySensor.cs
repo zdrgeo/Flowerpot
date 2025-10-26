@@ -34,7 +34,7 @@ public class TemperatureAndHumiditySensor : IDisposable
     {
         Temperature temperature = sht3x.Temperature;
 
-        double value = temperature.Value;
+        double value = temperature.DegreesCelsius;
 
         TemperatureMeasurment measurment = new (DateTimeOffset.UtcNow, value);
 
@@ -45,7 +45,7 @@ public class TemperatureAndHumiditySensor : IDisposable
     {
         RelativeHumidity humidity = sht3x.Humidity;
 
-        double value = humidity.Value;
+        double value = humidity.Percent;
 
         HumidityMeasurment measurment = new (DateTimeOffset.UtcNow, value);
 

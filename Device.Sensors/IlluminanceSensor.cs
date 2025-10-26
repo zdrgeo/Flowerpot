@@ -34,7 +34,7 @@ public class IlluminanceSensor : IIlluminanceSensor, IDisposable
     {
         Illuminance illuminance = bh1750fvi.Illuminance;
 
-        double value = illuminance.Value;
+        double value = illuminance.Lux;
 
         IlluminanceMeasurment measurment = new (DateTimeOffset.UtcNow, value);
 
