@@ -1,5 +1,4 @@
 using System.Device.I2c;
-// using Iot.Device.Sht3x;
 using Iot.Device.Si7021;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -20,22 +19,19 @@ public class TemperatureAndHumiditySensor : IDisposable
 
         device = I2cDevice.Create(connectionSettings);
 
-        // sht3x = new (device);
         si7021 = new (device);
     }
 
     const int busId = 1;
-    const int deviceAddress = Si7021.DefaultI2cAddress; // 64;
+    const int deviceAddress = Si7021.DefaultI2cAddress;
     private readonly IOptions<TemperatureAndHumiditySensorOptions> options;
     private readonly ILogger<TemperatureAndHumiditySensor> logger;
     private readonly I2cDevice device;
-    // private readonly Sht3x sht3x;
     private readonly Si7021 si7021;
     private bool disposed;
 
     public Task<TemperatureMeasurment> MeasureTemperatureAsync(CancellationToken cancellationToken)
     {
-        // Temperature temperature = sht3x.Temperature;
         Temperature temperature = si7021.Temperature;
 
         double value = temperature.DegreesCelsius;
@@ -47,7 +43,6 @@ public class TemperatureAndHumiditySensor : IDisposable
 
     public Task<HumidityMeasurment> MeasureHumidityAsync(CancellationToken cancellationToken)
     {
-        // RelativeHumidity humidity = sht3x.Humidity;
         RelativeHumidity humidity = si7021.Humidity;
 
         double value = humidity.Percent;
@@ -70,7 +65,6 @@ public class TemperatureAndHumiditySensor : IDisposable
         {
             if (disposing)
             {
-                // sht3x?.Dispose();
                 si7021?.Dispose();
                 device?.Dispose();
             }
