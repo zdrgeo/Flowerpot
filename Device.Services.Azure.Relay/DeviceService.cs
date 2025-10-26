@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace Device.Services.Azure.Relay;
 
-readonly record struct MeasurementModel(DateTimeOffset Timestamp, double Temperature, double SoilMoisture, double Illuminance);
+readonly record struct MeasurementModel(DateTimeOffset Timestamp, double Temperature, double Humidity, double Illuminance, double SoilMoisture);
 readonly record struct MeasurementRequestModel;
 readonly record struct MeasurementResponseModel()
 {
@@ -24,15 +24,17 @@ public class DeviceServiceOptions
 
 public class DeviceService(
     ITemperatureSensor temperatureSensor,
-    ISoilMoistureSensor soilMoistureSensor,
+    IHumiditySensor humiditySensor,
     IIlluminanceSensor illuminanceSensor,
+    ISoilMoistureSensor soilMoistureSensor,
     IOptions<DeviceServiceOptions> options,
     ILogger<DeviceService> logger
 ) : IDeviceService
 {
     private readonly ITemperatureSensor temperatureSensor = temperatureSensor ?? throw new ArgumentNullException(nameof(temperatureSensor));
-    private readonly ISoilMoistureSensor soilMoistureSensor = soilMoistureSensor ?? throw new ArgumentNullException(nameof(soilMoistureSensor));
+    private readonly IHumiditySensor humiditySensor = humiditySensor ?? throw new ArgumentNullException(nameof(humiditySensor));
     private readonly IIlluminanceSensor illuminanceSensor = illuminanceSensor ?? throw new ArgumentNullException(nameof(illuminanceSensor));
+    private readonly ISoilMoistureSensor soilMoistureSensor = soilMoistureSensor ?? throw new ArgumentNullException(nameof(soilMoistureSensor));
     private readonly IOptions<DeviceServiceOptions> options = options ?? throw new ArgumentNullException(nameof(options));
     private readonly ILogger<DeviceService> logger = logger;
     readonly Lock measurementsLock = new ();
@@ -72,14 +74,15 @@ public class DeviceService(
 
             // Read the sensors' measurements.
             double temperature = (await temperatureSensor.MeasureAsync(cancellationToken)).Value;
-            double soilMoisture = (await soilMoistureSensor.MeasureAsync(cancellationToken)).Value;
+            double humidity = (await humiditySensor.MeasureAsync(cancellationToken)).Value;
             double illuminance = (await illuminanceSensor.MeasureAsync(cancellationToken)).Value;
+            double soilMoisture = (await soilMoistureSensor.MeasureAsync(cancellationToken)).Value;
             // Read the sensors' measurements.
 
             // Save a series of the last few measurements.
             lock (measurementsLock)
             {
-                measurements.AddLast(new MeasurementModel(timestamp, temperature, soilMoisture, illuminance));
+                measurements.AddLast(new MeasurementModel(timestamp, temperature, humidity, illuminance, soilMoisture));
 
                 while (measurements.Count > options.Value.MeasurementsCount)
                 {

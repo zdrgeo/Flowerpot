@@ -15,7 +15,7 @@ public class IlluminanceSensor : IIlluminanceSensor, IDisposable
         this.options = options ?? throw new ArgumentNullException(nameof(options));
         this.logger = logger;
 
-        I2cConnectionSettings connectionSettings = new (busId, (int)I2cAddress.AddPinLow);
+        I2cConnectionSettings connectionSettings = new (busId, deviceAddress);
 
         device = I2cDevice.Create(connectionSettings);
 
@@ -23,6 +23,7 @@ public class IlluminanceSensor : IIlluminanceSensor, IDisposable
     }
 
     const int busId = 1;
+    const int deviceAddress = (int)I2cAddress.AddPinLow;
     private readonly IOptions<IlluminanceSensorOptions> options;
     private readonly ILogger<IlluminanceSensor> logger;
     private readonly I2cDevice device;

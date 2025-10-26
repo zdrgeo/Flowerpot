@@ -18,7 +18,7 @@ public class SoilMoistureSensor : ISoilMoistureSensor, IDisposable
         this.options = options ?? throw new ArgumentNullException(nameof(options));
         this.logger = logger;
 
-        I2cConnectionSettings connectionSettings = new (busId, (int)I2cAddress.GND);
+        I2cConnectionSettings connectionSettings = new (busId, deviceAddress);
 
         device = I2cDevice.Create(connectionSettings);
 
@@ -26,6 +26,7 @@ public class SoilMoistureSensor : ISoilMoistureSensor, IDisposable
     }
 
     const int busId = 1;
+    const int deviceAddress = (int)I2cAddress.GND;
     private readonly IOptions<SoilMoistureSensorOptions> options;
     private readonly ILogger<SoilMoistureSensor> logger;
     private readonly I2cDevice device;
