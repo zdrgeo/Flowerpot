@@ -17,15 +17,15 @@ graph TD
 
 ### App
 
-#### Dashboard view
+#### Dashboard View
 
 ![Flowerpot - Dashboard](./Docs/App/images/Flowerpot_Dashboard.png)
 
-#### About view
+#### About View
 
 ![Flowerpot - Dashboard](./Docs/App/images/Flowerpot_About.png)
 
-### Bill of Materials
+### Device Bill of Materials
 
 | Image | Role | Name |
 |-------|------|------|
