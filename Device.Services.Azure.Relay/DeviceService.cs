@@ -60,7 +60,7 @@ public class DeviceService(
 
         if (logger.IsEnabled(LogLevel.Information))
         {
-            logger.LogInformation("listening at: {time}", DateTimeOffset.Now);
+            logger.LogInformation("Listening at: {time}", DateTimeOffset.Now);
         }
 
         while (!cancellationToken.IsCancellationRequested)
