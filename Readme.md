@@ -29,7 +29,7 @@ graph TD
 
 | Image | Role | Name |
 |-------|------|------|
-| ![Board](./Docs/BOM/images/Board.png) | Board | Raspberry Pi 2 Model B |
+| ![Single-Board Computer (SBC)](./Docs/BOM/images/SBC.png) | Single-Board Computer (SBC) | Raspberry Pi 2 Model B |
 | ![Analog to Digital Converter (ADC)](./Docs/BOM/images/ADC.png) | Analog to Digital Converter (ADC) | ADC1115 |
 | ![Temperature and Humidity](./Docs/BOM/images/TemperatureAndHumiditySensor.png) | Temperature and Humidity Sensor | SHT21, HTU21 |
 | ![Illuminance](./Docs/BOM/images/IlluminanceSensor.png) | Illuminance Sensor | BH1750 |
