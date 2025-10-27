@@ -1,6 +1,6 @@
 # Flowerpot (later rebranded Project Bloom Pot)
 
-![Flowerpot](./Docs/Images//Flowerpot.png)
+![Flowerpot](./Docs/images/Flowerpot.png)
 
 Project Bloom Pot - 9a, 2025
 
@@ -15,31 +15,36 @@ graph TD
     A[Flowerpot App] --> AR[Azure Relay] --> D[Flowerpot Device with Sensors]
 ```
 
-### Circuit
-
 ### App
 
-Dashboard view
+#### Dashboard view
 
-![Flowerpot - Dashboard](./Docs/Images//Flowerpot_Dashboard.png)
+![Flowerpot - Dashboard](./Docs/App/images/Flowerpot_Dashboard.png)
 
-About view
+#### About view
 
-![Flowerpot - Dashboard](./Docs/Images//Flowerpot_About.png)
+![Flowerpot - Dashboard](./Docs/App/images/Flowerpot_About.png)
 
-### Service
+### Bill of Materials
 
-#### Status
+| Image | Role | Name |
+|-------|------|------|
+| ![Board](./Docs/BOM/images/Board.png) | Board | Raspberry Pi 2 Model B |
+| ![Analog to Digital Converter (ADC)](./Docs/BOM/images/ADC.png) | Analog to Digital Converter (ADC) | ADC1115 |
+| ![Temperature and Humidity](./Docs/BOM/images/TemperatureAndHumiditySensor.png) | Temperature and Humidity Sensor | SHT21, HTU21 |
+| ![Illuminance](./Docs/BOM/images/IlluminanceSensor.png) | Illuminance Sensor | BH1750 |
+| ![Soil Moisture](./Docs/BOM/images/SoilMoistureSensor.png) | Soil Moisture Sensor | Capacitive Soil Moisture Sensor v1.2 |
+| ![Jumper Wires](./Docs/BOM/images/JumperWires.png) | Jumper Wires |  |
+
+### Deployment
+
+#### Service
 
 ```shell
 sudo systemctl status Flowerpot
 
 sudo journalctl -u Flowerpot -f
-```
 
-#### Deployment
-
-```shell
 sudo systemctl stop Flowerpot
 
 dotnet publish Device.Host -c Release -o /usr/local/Flowerpot
@@ -53,9 +58,7 @@ sudo systemctl daemon-reload
 sudo systemctl start Flowerpot
 ```
 
-### Docker
-
-#### Deployment
+#### Docker
 
 ```shell
 dotnet publish --os linux --arch arm /t:PublishContainer
