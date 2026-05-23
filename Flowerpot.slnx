@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Device.Host/Device.Host.csproj" />
+  <Project Path="Device.Sensors/Device.Sensors.csproj" />
+  <Project Path="Device.Services.Azure.Relay/Device.Services.Azure.Relay.csproj" />
+  <Project Path="Device.Services/Device.Services.csproj" />
+</Solution>
